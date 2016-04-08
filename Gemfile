@@ -33,6 +33,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+# Use puma instead of WEBrick
+gem 'puma'
+
 group :production do
    gem 'mini_portile2'
    gem 'rails_12factor'
