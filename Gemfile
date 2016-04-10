@@ -30,6 +30,10 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Devise for auth
 gem 'devise'
 
+# Don't reinvent UI
+gem 'therubyracer'
+gem 'less-rails-bootstrap'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 
