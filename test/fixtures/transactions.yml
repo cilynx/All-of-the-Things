@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  date: 2016-04-10
+  action: MyString
+  vendor_id: 
+  price: 9.99
+  json: 
+
+two:
+  date: 2016-04-10
+  action: MyString
+  vendor_id: 
+  price: 9.99
+  json: 
