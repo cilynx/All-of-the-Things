@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  resources :transactions
+  resources :vendors
+  resources :accounts
   get 'welcome/index'
 
   devise_for :users
@@ -7,6 +10,8 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'
+
+  post 'account/:id/import' => 'accounts#import', as: :import_account_transactions
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
