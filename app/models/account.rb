@@ -4,6 +4,9 @@ class Account < ActiveRecord::Base
   def self.import(file, account_id)
     require 'date'
 
+    mcount = 0
+    count = 0
+
     File.foreach(file.path).with_index do |line, index|
       if(line.match("Date,Action,Security,Price,Quantity,Amount,Text,Memo,Commission,"))
 	@type = "Capital One Investing CSV"
@@ -21,7 +24,7 @@ class Account < ActiveRecord::Base
 	vendor.save
       end
 
-      if(@type.match("Capital One 360 CSV"))
+      if(@type.match("Capital One Investing CSV"))
 
 	if(array[1].match(/Buy|Sell/)) 
 	  @transaction = Transaction.where(
@@ -33,6 +36,9 @@ class Account < ActiveRecord::Base
 	    commission: array[8],
 	    vendor_id: vendor.id
 	  ).take || Transaction.new
+	  if(@transaction.action) 
+	    mcount += 1
+	  end
 	  @transaction.vendor_id = vendor.id
 	  @transaction.price = array[3]
 	  @transaction.quantity = array[4]
@@ -46,6 +52,9 @@ class Account < ActiveRecord::Base
 	    memo: array[7],
 	    vendor_id: vendor.id
 	  ).take || Transaction.new
+	  if(@transaction.action) 
+	    mcount += 1
+	  end
 	  @transaction.vendor_id = vendor.id
 	  @transaction.price = array[5]
 	  @transaction.memo = array[7]
@@ -58,6 +67,9 @@ class Account < ActiveRecord::Base
 	    memo: array[7],
 	    vendor_id: vendor.id
 	  ).take || Transaction.new
+	  if(@transaction.action) 
+	    mcount += 1
+	  end
 	  @transaction.vendor_id = vendor.id
 	  @transaction.price = array[3]
 	  @transaction.quantity = array[4]
@@ -68,6 +80,9 @@ class Account < ActiveRecord::Base
 	    action: array[1],
 	    price: array[5]
 	  ).take || Transaction.new
+	  if(@transaction.action) 
+	    mcount += 1
+	  end
 	  @transaction.price = array[5]
 	elsif(array[1].match(/CREDIT|DEBIT/))
 	  @transaction = Transaction.where(
@@ -76,6 +91,9 @@ class Account < ActiveRecord::Base
 	    memo: array[2],
 	    price: array[5]
 	  ).take || Transaction.new
+	  if(@transaction.action) 
+	    mcount += 1
+	  end
 	  @transaction.memo = array[2]
 	  @transaction.price = array[5]
 	else
@@ -85,10 +103,11 @@ class Account < ActiveRecord::Base
 	@transaction.action = array[1]
 	@transaction.account_id = account_id 
 	@transaction.save
+	count += 1
       end
     end
 
-    return @type
+    return "Imported #{count} transactions from #{@type}. #{count - mcount} were new and #{mcount} matched existing transactions"
 
   end
 end
