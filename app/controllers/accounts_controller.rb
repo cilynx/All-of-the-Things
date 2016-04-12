@@ -24,7 +24,7 @@ class AccountsController < ApplicationController
 
   # POST /accounts/1/import
   def import
-    redirect_to :back, notice: "Imported " + Account.import(params[:file], @account.id)
+    redirect_to :back, notice: Account.import(params[:file], @account.id)
   end
 
   # POST /accounts
