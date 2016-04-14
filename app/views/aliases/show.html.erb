@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Payee:</strong>
+  <%= @alias.payee %>
+</p>
+
+<p>
+  <strong>Memo:</strong>
+  <%= @alias.memo %>
+</p>
+
+<p>
+  <strong>Vendor:</strong>
+  <%= link_to @alias.vendor.name, vendor_path(@alias.vendor) %>
+</p>
+
+<%= link_to 'Edit', edit_alias_path(@alias) %> |
+<%= link_to 'Back', aliases_path %>

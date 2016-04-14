@@ -63,6 +63,7 @@ GEM
     execjs (2.6.0)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
+    hpricot (0.8.6)
     i18n (0.7.0)
     jbuilder (2.4.1)
       activesupport (>= 3.0.0, < 5.1)
@@ -93,6 +94,8 @@ GEM
     minitest (5.8.4)
     multi_json (1.11.2)
     nokogiri (1.6.7.2)
+    ofx-parser (1.1.0)
+      hpricot (>= 0.6)
     orm_adapter (0.5.0)
     pg (0.18.4)
     puma (3.4.0)
@@ -183,6 +186,7 @@ DEPENDENCIES
   jquery-rails
   less-rails-bootstrap
   mini_portile2
+  ofx-parser
   pg (~> 0.15)
   puma
   rails (= 4.2.5.2)
