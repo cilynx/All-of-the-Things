@@ -34,6 +34,9 @@ gem 'devise'
 gem 'therubyracer'
 gem 'less-rails-bootstrap'
 
+# OFX/QFX import for Accounts
+gem 'ofx-parser'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 

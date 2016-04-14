@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160411030706) do
+ActiveRecord::Schema.define(version: 20160412181749) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,9 +22,22 @@ ActiveRecord::Schema.define(version: 20160411030706) do
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
     t.integer  "user_id"
+    t.string   "type"
   end
 
   add_index "accounts", ["user_id"], name: "index_accounts_on_user_id", using: :btree
+
+  create_table "aliases", force: :cascade do |t|
+    t.string   "payee"
+    t.string   "memo"
+    t.integer  "vendor_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "account_id"
+  end
+
+  add_index "aliases", ["account_id"], name: "index_aliases_on_account_id", using: :btree
+  add_index "aliases", ["vendor_id"], name: "index_aliases_on_vendor_id", using: :btree
 
   create_table "transactions", force: :cascade do |t|
     t.date     "date"
@@ -37,6 +50,7 @@ ActiveRecord::Schema.define(version: 20160411030706) do
     t.decimal  "quantity"
     t.text     "memo"
     t.decimal  "commission"
+    t.string   "payee"
   end
 
   add_index "transactions", ["account_id"], name: "index_transactions_on_account_id", using: :btree
@@ -70,6 +84,8 @@ ActiveRecord::Schema.define(version: 20160411030706) do
   end
 
   add_foreign_key "accounts", "users"
+  add_foreign_key "aliases", "accounts"
+  add_foreign_key "aliases", "vendors"
   add_foreign_key "transactions", "accounts"
   add_foreign_key "transactions", "vendors"
 end

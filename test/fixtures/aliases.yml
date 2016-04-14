@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  payee: MyString
+  memo: MyString
+  vendor_id: 
+
+two:
+  payee: MyString
+  memo: MyString
+  vendor_id: 

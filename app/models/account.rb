@@ -8,7 +8,36 @@ class Account < ActiveRecord::Base
     count = 0
 
     File.foreach(file.path).with_index do |line, index|
-      if(line.match("Date,Action,Security,Price,Quantity,Amount,Text,Memo,Commission,"))
+      if(line.match("OFXHEADER:100"))
+	@type = "OFX"
+	ofx = OfxParser::OfxParser.parse(open(file.path))
+	ofx.bank_account.statement.transactions.each do |fxtrans|
+	  @transaction = Transaction.where(
+	    action: fxtrans.type,
+	    price: fxtrans.amount,
+	    date: fxtrans.date
+	  ).take || Transaction.new
+	  if(@transaction.action)
+	    mcount += 1
+	  end
+	  if(a = Alias.where(payee: fxtrans.payee, memo: fxtrans.memo).take)
+	    if(a.vendor_id)
+	      @transaction.vendor_id = a.vendor_id
+	    end
+	  else
+	    Alias.new(payee: fxtrans.payee, memo: fxtrans.memo).save
+	  end
+	  @transaction.memo = fxtrans.memo
+	  @transaction.payee = fxtrans.payee
+	  @transaction.action = fxtrans.type
+	  @transaction.price = fxtrans.amount
+	  @transaction.date = fxtrans.date
+	  @transaction.account_id = account_id 
+	  @transaction.save
+	  count += 1
+	end
+	return "Imported #{count} transactions from #{@type}. #{count - mcount} were new and #{mcount} matched existing transactions"
+      elsif(line.match("Date,Action,Security,Price,Quantity,Amount,Text,Memo,Commission,"))
 	@type = "Capital One Investing CSV"
 	next
       end
@@ -17,14 +46,14 @@ class Account < ActiveRecord::Base
 	next
       end
 
-      array = line.split(',')
-
-      if(array[2])
-	vendor = Vendor.find_by(symbol: array[2]) || Vendor.new(symbol: array[2])
-	vendor.save
-      end
-
       if(@type.match("Capital One Investing CSV"))
+
+	array = line.split(',')
+
+	if(array[2])
+	  vendor = Vendor.find_by(symbol: array[2]) || Vendor.new(symbol: array[2])
+	  vendor.save
+	end
 
 	if(array[1].match(/Buy|Sell/)) 
 	  @transaction = Transaction.where(
