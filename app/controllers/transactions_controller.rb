@@ -69,7 +69,11 @@ class TransactionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def transaction_params
-      # TODO: Trusting account_id here is a gaping security hole.  We need to put in a security model so folks can't access other folks data.
-      params.require(:transaction).permit(:date, :action, :vendor_id, :price, :quantity, :commission, :memo, :account_id)
+      # TODO This is pretty janky and we should really have a real security model
+      if(Account.find(params[:account_id]).user_id == current_user.id)
+	params.require(:transaction).permit(:date, :action, :vendor_id, :price, :quantity, :commission, :memo, :account_id)
+      else
+	params.require(:transaction).permit(:date, :action, :vendor_id, :price, :quantity, :commission, :memo)
+      end
     end
 end

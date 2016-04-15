@@ -140,3 +140,12 @@ class Account < ActiveRecord::Base
 
   end
 end
+
+class CheckingAccount < Account
+end
+
+class SavingsAccount < Account
+end
+
+class StockAccount < Account
+end

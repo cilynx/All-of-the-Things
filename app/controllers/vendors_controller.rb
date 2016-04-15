@@ -4,7 +4,7 @@ class VendorsController < ApplicationController
   # GET /vendors
   # GET /vendors.json
   def index
-    @vendors = Vendor.all
+    @vendors = Vendor.order(:name)
   end
 
   # GET /vendors/1
@@ -42,8 +42,6 @@ class VendorsController < ApplicationController
   def update
     respond_to do |format|
       if @vendor.update(vendor_params)
-	# This should really be handled in the model, but I'm lazy.
-	@vendor.update_column('tags', vendor_params[:tags].split(',').collect{|x| x.strip || x})
         format.html { redirect_to @vendor, notice: 'Vendor was successfully updated.' }
         format.json { render :show, status: :ok, location: @vendor }
       else

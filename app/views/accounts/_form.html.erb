@@ -21,7 +21,7 @@
   </div>
   <div class="field">
     <%= f.label :type %><br>
-    <%= f.text_field :type %>
+    <%= f.select :type, options_for_select(Account.descendants.map{ |c| c.to_s }.sort) %>
   </div>
   <div class="actions">
     <%= f.submit %>
