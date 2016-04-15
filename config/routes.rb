@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   resources :transactions
   resources :vendors
   resources :accounts
+  resources :checking_accounts, controller: 'accounts', type: 'CheckingAccount'
+  resources :stock_accounts, controller: 'accounts', type: 'StockAccount'
   get 'welcome/index'
 
   devise_for :users

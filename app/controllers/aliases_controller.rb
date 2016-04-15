@@ -42,6 +42,12 @@ class AliasesController < ApplicationController
   def update
     respond_to do |format|
       if @alias.update(alias_params)
+	if(@alias.vendor_id)
+	  Transaction.where(payee: @alias.payee, memo: @alias.memo).find_each do |transaction|
+	    transaction.vendor_id = @alias.vendor_id
+	    transaction.save
+	  end
+	end
         format.html { redirect_to @alias, notice: 'Alias was successfully updated.' }
         format.json { render :show, status: :ok, location: @alias }
       else

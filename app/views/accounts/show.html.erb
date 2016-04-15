@@ -15,22 +15,41 @@
 	  <th>Action</th>
 	  <th>Vendor</th>
 	  <th>Price</th>
-	  <th>Quantity</th>
-	  <th>Commission</th>
+	  <% if @account.type == 'StockAccount' %>
+	    <th>Quantity</th>
+	    <th>Commission</th>
+	  <% end %>
+	  <th>Payee</th>
 	  <th>Memo</th>
 	</tr>
       </thead>
       <tbody>
+	<%= form_for :transaction, url: transactions_path, html: { class: 'form-inline' } do |f| %>
+	  <tr>
+	    <%= f.hidden_field(:account_id, value: @account.id) %>
+	    <td><%= f.date_select(:date, { class: 'form-control', placeholder: 'date' }) %></td>
+	    <td><%= f.text_field(:action, { class: 'form-control', placeholder: 'action' }) %></td>
+	    <td><%= f.select :vendor_id, options_for_select(Vendor.order(:name).map{|s|[s.name, s.id]}), {class: 'form-control', placeholder: 'date'} %></td>
+	    <td><%= f.number_field :price, step: '0.0001', class: 'form-control', placeholder: 'price' %></td>
+	    <% if @account.type == 'StockAccount' %>
+	      <td><%= f.number_field :quantity, step: '0.0001', class: 'form-control', placeholder: 'quantity' %></td>
+	      <td><%= f.number_field :commission, step: '0.01', class: 'form-control', placeholder: 'commission' %></td>
+	    <% end %>
+	    <td><%= f.submit('Add New', { class: 'btn btn-default' }) %>
+	</tr>
+      <% end %>
       <% @account.transactions.sort { |a,b| a.date <=> b.date }.reverse.each do |transaction| %>
 	<tr>
 	  <td><%= transaction.date %></td>
 	  <td><%= transaction.action %></td>
 	  <td>
 	    <% if transaction.vendor %>
-	      <% if @account.type == 'stock' %>
+	      <% if @account.type == 'StockAccount' %>
 		<%= link_to transaction.vendor.symbol, vendor_path(transaction.vendor) %>
-	      <% elsif @account.type == 'checking' %>
+	      <% elsif @account.type == 'CheckingAccount' %>
 		<%= link_to transaction.vendor.name, vendor_path(transaction.vendor) %>
+	      <% else %>
+		<span class="label label-danger">Unknown account type</span>
 	      <% end %>
 	    <% else %>
 	      <% a = Alias.where(payee: transaction.payee, memo: transaction.memo).take %>
@@ -38,24 +57,14 @@
 	    <% end %>
 	  </td>
 	  <td><%= transaction.price %></td>
-	  <td><%= transaction.quantity %></td>
-	  <td><%= transaction.commission %></td>
+	  <% if @account.type == 'StockAccount' %>
+	    <td><%= transaction.quantity %></td>
+	    <td><%= transaction.commission %></td>
+	  <% end %>
+	  <td><%= transaction.payee %></td>
 	  <td><%= transaction.memo %></td>
 	</tr>
       <% end %>
-      <%= form_for :transaction, url: transactions_path, html: { class: 'form-inline' } do |f| %>
-	<tr>
-	  <%= f.hidden_field(:account_id, value: @account.id) %>
-	  <td><%= f.date_select(:date, { class: 'form-control', placeholder: 'date' }) %></td>
-	  <td><%= f.text_field(:action, { class: 'form-control', placeholder: 'action' }) %></td>
-	  <td><%= f.select :vendor_id, options_for_select(Vendor.all.map{|s|[s.name, s.id]}), { class: 'form-control', placeholder: 'date' } %></td>
-	  <td><%= f.number_field :price, step: '0.0001', class: 'form-control', placeholder: 'price' %></td>
-	  <td><%= f.number_field :quantity, step: '0.0001', class: 'form-control', placeholder: 'quantity' %></td>
-	  <td><%= f.number_field :commission, step: '0.01', class: 'form-control', placeholder: 'commission' %></td>
-	  <td><%= f.text_area(:memo, { class: 'form-control', placeholder: 'memo' }) %></td>
-	  <td><%= f.submit('Add New', { class: 'btn btn-default' }) %>
-      </tr>
-    <% end %>
       </tbody>
     </table>
   </div>
