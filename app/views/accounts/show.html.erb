@@ -13,14 +13,13 @@
 	<tr>
 	  <th>Date</th>
 	  <th>Action</th>
-	  <th>Vendor</th>
+	  <th>Payee</th>
 	  <th>Price</th>
 	  <% if @account.type == 'StockAccount' %>
 	    <th>Quantity</th>
 	    <th>Commission</th>
 	  <% end %>
-	  <th>Payee</th>
-	  <th>Memo</th>
+	  <th colspan=2>Memo</th>
 	</tr>
       </thead>
       <tbody>
@@ -39,7 +38,7 @@
 	</tr>
       <% end %>
       <% @account.transactions.sort { |a,b| a.date <=> b.date }.reverse.each do |transaction| %>
-	<tr>
+	<tr id="<%= transaction.id %>">
 	  <td><%= transaction.date %></td>
 	  <td><%= transaction.action %></td>
 	  <td>

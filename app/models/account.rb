@@ -1,4 +1,7 @@
 class Account < ActiveRecord::Base
+
+  gorupify :group_member
+
   has_many :transactions
 
   def self.import(file, account_id)
@@ -12,7 +15,7 @@ class Account < ActiveRecord::Base
 	@type = "OFX"
 	ofx = OfxParser::OfxParser.parse(open(file.path))
 	ofx.bank_account.statement.transactions.each do |fxtrans|
-	  @transaction = Transaction.where(
+	  @transaction = current_user.transactions.where(
 	    action: fxtrans.type,
 	    price: fxtrans.amount,
 	    date: fxtrans.date
@@ -56,7 +59,7 @@ class Account < ActiveRecord::Base
 	end
 
 	if(array[1].match(/Buy|Sell/)) 
-	  @transaction = Transaction.where(
+	  @transaction = current_user.transactions.where(
 	    date: Date.strptime(array[0], '%m/%d/%Y'),
 	    action: array[1],
 	    price: array[3],
@@ -74,7 +77,7 @@ class Account < ActiveRecord::Base
 	  @transaction.memo = array[7]
 	  @transaction.commission = array[8]
 	elsif(array[1].match(/Div/))
-	  @transaction = Transaction.where(
+	  @transaction = current_user.transactions.where(
 	    date: Date.strptime(array[0], '%m/%d/%Y'),
 	    action: array[1],
 	    price: array[5],
@@ -88,7 +91,7 @@ class Account < ActiveRecord::Base
 	  @transaction.price = array[5]
 	  @transaction.memo = array[7]
 	elsif(array[1].match(/ReinvDiv/))
-	  @transaction = Transaction.where(
+	  @transaction = current_user.transactions.where(
 	    date: Date.strptime(array[0], '%m/%d/%Y'),
 	    action: array[1],
 	    price: array[3],
@@ -104,7 +107,7 @@ class Account < ActiveRecord::Base
 	  @transaction.quantity = array[4]
 	  @transaction.memo = array[7]
 	elsif(array[1].match(/MargInt/))
-	  @transaction = Transaction.where(
+	  @transaction = current_user.transactions.where(
 	    date: Date.strptime(array[0], '%m/%d/%Y'),
 	    action: array[1],
 	    price: array[5]
@@ -114,7 +117,7 @@ class Account < ActiveRecord::Base
 	  end
 	  @transaction.price = array[5]
 	elsif(array[1].match(/CREDIT|DEBIT/))
-	  @transaction = Transaction.where(
+	  @transaction = current_user.transactions.where(
 	    date: Date.strptime(array[0], '%m/%d/%Y'),
 	    action: array[1],
 	    memo: array[2],
@@ -131,6 +134,13 @@ class Account < ActiveRecord::Base
 	@transaction.date = Date.strptime(array[0], '%m/%d/%Y') 
 	@transaction.action = array[1]
 	@transaction.account_id = account_id 
+
+	if(transfer = current_user.transactions.where("date = ? AND price = ? AND memo LIKE '%?' AND transfer_id = ?", @transaction.date, -@transaction.price, @transaction.account.four, nil).take)
+	  @transaction.transfer_id = transfer.id
+	  transfer.transfer_id = @transaction.id
+	  transfer.save
+	end
+
 	@transaction.save
 	count += 1
       end

@@ -23,6 +23,10 @@
     <%= f.label :type %><br>
     <%= f.select :type, options_for_select(Account.descendants.map{ |c| c.to_s }.sort) %>
   </div>
+  <div class="field">
+    <%= f.label :four %><br>
+    <%= f.number_field :four %>
+  </div>
   <div class="actions">
     <%= f.submit %>
   </div>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160414191243) do
+ActiveRecord::Schema.define(version: 20160415221026) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 20160414191243) do
     t.datetime "updated_at",  null: false
     t.integer  "user_id"
     t.string   "type"
+    t.integer  "four"
   end
 
   add_index "accounts", ["user_id"], name: "index_accounts_on_user_id", using: :btree
@@ -39,18 +40,38 @@ ActiveRecord::Schema.define(version: 20160414191243) do
   add_index "aliases", ["account_id"], name: "index_aliases_on_account_id", using: :btree
   add_index "aliases", ["vendor_id"], name: "index_aliases_on_vendor_id", using: :btree
 
+  create_table "group_memberships", force: :cascade do |t|
+    t.integer  "member_id",       null: false
+    t.string   "member_type",     null: false
+    t.integer  "group_id"
+    t.string   "group_type"
+    t.string   "group_name"
+    t.string   "membership_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "group_memberships", ["group_name"], name: "index_group_memberships_on_group_name", using: :btree
+  add_index "group_memberships", ["group_type", "group_id"], name: "index_group_memberships_on_group_type_and_group_id", using: :btree
+  add_index "group_memberships", ["member_type", "member_id"], name: "index_group_memberships_on_member_type_and_member_id", using: :btree
+
+  create_table "groups", force: :cascade do |t|
+    t.string "type"
+  end
+
   create_table "transactions", force: :cascade do |t|
     t.date     "date"
     t.string   "action"
     t.integer  "vendor_id"
     t.decimal  "price"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
     t.integer  "account_id"
     t.decimal  "quantity"
     t.text     "memo"
     t.decimal  "commission"
     t.string   "payee"
+    t.integer  "transfer_id"
   end
 
   add_index "transactions", ["account_id"], name: "index_transactions_on_account_id", using: :btree

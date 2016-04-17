@@ -30,6 +30,9 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use Devise for auth
 gem 'devise'
 
+# Groups make more sense than roles
+gem 'groupify'
+
 # Don't reinvent UI
 gem 'therubyracer'
 gem 'less-rails-bootstrap'
