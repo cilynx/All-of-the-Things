@@ -4,6 +4,20 @@
   </div>
   <div class="panel-body">
     <h2>Groups</h2>
+    <% @user.named_groups.each do |group| %>
+      <h3><%= group %>
+      <% if @user.in_named_group?(group, as: :manager) %>
+	<span class="label label-success">manager</span>
+      <% end %>
+      </h3>
+      <table class="table table-striped">
+      <% User.in_named_group(group).each do |user| %>
+	<% if user.id != current_user.id %>
+	  <tr><td><%= link_to user.email, user_path %></td></tr>
+	<% end %>
+      <% end %>
+      </table>
+    <% end %>
   </div>
   <div class="panel-footer">
   </div>
