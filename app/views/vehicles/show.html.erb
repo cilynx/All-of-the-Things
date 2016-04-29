@@ -13,29 +13,42 @@
       </div>
    </div>
    <table class="table table-striped">
-      <% @vehicle.fillups.each do |fillup| %>
+      <thead>
 	 <tr>
-	    <td><%= fillup.date %></td>
-	    <td><%= fillup.odometer %></td>
-	    <td><%= fillup.brand %></td>
-	    <td><%= fillup.grade %></td>
-	    <td><%= fillup.gallons %></td>
-	    <td><%= fillup.ppg %></td>
+	    <th>Date</th>
+	    <th>Odometer</th>
+	    <th>Brand</th>
+	    <th>Grade</th>
+	    <th>Gallon</th>
+	    <th>PPG</th>
+	    <th>Cost</th>
 	 </tr>
-      <% end %>
+      </thead>
+      <tbody>
+	 <% @vehicle.fillups.each do |fillup| %>
+	    <tr>
+	       <td><%= fillup.date %></td>
+	       <td><%= fillup.odometer %></td>
+	       <td><%= fillup.brand %></td>
+	       <td><%= fillup.grade %></td>
+	       <td><%= fillup.gallons %></td>
+	       <td>$<%= fillup.ppg %></td>
+	       <td>$<%= number_with_precision fillup.ppg * fillup.gallons, :precision => 2 %></td>
+	    </tr>
+	 <% end %>
 
-      <%= form_for(:fillup, url: vehicle_fillup_path) do |f| %>
-	 <tr>
-	    <td><%= f.date_select(:date, :class => 'form-control', :placeholder => 'date') %></td>
-	    <td><%= f.number_field(:odometer, :class => 'form-control', :placeholder => 'odometer') %></td>
-	    <td><%= f.text_field(:brand, :class => 'form-control', :placeholder => 'brand') %></td>
-	    <td><%= f.text_field(:grade, :class => 'form-control', :placeholder => 'grade') %></td>
-	    <td><%= f.number_field(:gallons, :class => 'form-control', :placeholder => 'gallons', :step => 0.001) %></td>
-	    <td><%= f.number_field(:ppg, :class => 'form-control', :placeholder => 'ppg', :step => 0.001) %></td>
-	    <td><%= f.submit("Add", :class => 'btn btn-default') %></td>
-	 </tr>
-      <% end %>
-
+	 <%= form_for(:fillup, url: vehicle_fillup_path) do |f| %>
+	    <tr>
+	       <td><%= f.date_select(:date, :class => 'form-control', :placeholder => 'date') %></td>
+	       <td><%= f.number_field(:odometer, :class => 'form-control', :placeholder => 'odometer') %></td>
+	       <td><%= f.text_field(:brand, :class => 'form-control', :placeholder => 'brand') %></td>
+	       <td><%= f.text_field(:grade, :class => 'form-control', :placeholder => 'grade') %></td>
+	       <td><%= f.number_field(:gallons, :class => 'form-control', :placeholder => 'gallons', :step => 0.001) %></td>
+	       <td><%= f.number_field(:ppg, :class => 'form-control', :placeholder => 'ppg', :step => 0.001) %></td>
+	       <td><%= f.submit("Add", :class => 'btn btn-default') %></td>
+	    </tr>
+	 <% end %>
+      </tbody>
    </table>
    <br>
    <div class="panel-footer">
