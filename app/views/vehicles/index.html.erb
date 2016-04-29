@@ -1,0 +1,21 @@
+<div class="row">
+   <% current_user.vehicles.sort {|a,b| a.updated_at <=> b.updated_at}.each do |vehicle| %>
+      <div class="col-sm-4">
+	 <div class="thumbnail">
+	    <%= link_to image_tag(vehicle_image_path(vehicle)), vehicle %>
+	    <div class="caption">
+	       <%= vehicle.year %> <%= vehicle.make %> <%= vehicle.model %><br>
+	       [ <%= link_to 'Show', vehicle %> | <%= link_to 'Destroy', vehicle, method: :delete, data: { confirm: 'Are you sure?' } %> ]
+	    </div>
+	 </div>
+      </div>
+   <% end %>
+</div>
+<%= form_for(:vehicle, url: vehicles_path, html: { :class => "form-inline" }) do |f| %>
+   <%= f.number_field(:year, { :class => 'form-control', :placeholder => 'year' }) %>
+   <%= f.text_field(:make , { :class => 'form-control', :placeholder => 'make' }) %>
+   <%= f.text_field(:model, { :class => 'form-control', :placeholder => 'model' }) %>
+   <%= f.text_field(:vin, { :class => 'form-control', :placeholder => 'vin' }) %>
+   <%= f.submit("Add New", { :class => 'btn btn-default' }) %>
+   <%= f.file_field(:image_file, { :style => 'padding-top:1em' }) %>
+<% end %>

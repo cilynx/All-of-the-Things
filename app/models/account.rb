@@ -1,6 +1,6 @@
 class Account < ActiveRecord::Base
 
-  groupify :group_member
+  groupify :named_group_member
 
   has_many :transactions
 
