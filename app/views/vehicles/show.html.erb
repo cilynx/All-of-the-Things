@@ -22,6 +22,7 @@
 	    <th>Gallon</th>
 	    <th>PPG</th>
 	    <th>Cost</th>
+	    <th>MPG</th>
 	 </tr>
       </thead>
       <tbody>
@@ -34,7 +35,13 @@
 	       <td><%= fillup.gallons %></td>
 	       <td>$<%= fillup.ppg %></td>
 	       <td>$<%= number_with_precision fillup.ppg * fillup.gallons, :precision => 2 %></td>
+	       <td>
+		  <% if @last %>
+		     <%= number_with_precision (@last.odometer - fillup.odometer) / fillup.gallons, :precision => 0 %>
+		  <% end %>
+	       </td>
 	    </tr>
+	    <% @last = fillup %>
 	 <% end %>
 
 	 <%= form_for(:fillup, url: vehicle_fillup_path) do |f| %>
@@ -45,7 +52,7 @@
 	       <td><%= f.text_field(:grade, :class => 'form-control', :placeholder => 'grade') %></td>
 	       <td><%= f.number_field(:gallons, :class => 'form-control', :placeholder => 'gallons', :step => 0.001) %></td>
 	       <td><%= f.number_field(:ppg, :class => 'form-control', :placeholder => 'ppg', :step => 0.001) %></td>
-	       <td><%= f.submit("Add", :class => 'btn btn-default') %></td>
+	       <td colspan=2><%= f.submit("Add", :class => 'btn btn-default') %></td>
 	    </tr>
 	 <% end %>
       </tbody>
