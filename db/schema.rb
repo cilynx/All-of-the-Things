@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160415221026) do
+ActiveRecord::Schema.define(version: 20160429062655) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,20 @@ ActiveRecord::Schema.define(version: 20160415221026) do
 
   add_index "aliases", ["account_id"], name: "index_aliases_on_account_id", using: :btree
   add_index "aliases", ["vendor_id"], name: "index_aliases_on_vendor_id", using: :btree
+
+  create_table "fillups", force: :cascade do |t|
+    t.date     "date"
+    t.integer  "odometer"
+    t.decimal  "gallons"
+    t.decimal  "ppg"
+    t.string   "brand"
+    t.string   "grade"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "vehicle_id"
+  end
+
+  add_index "fillups", ["vehicle_id"], name: "index_fillups_on_vehicle_id", using: :btree
 
   create_table "group_memberships", force: :cascade do |t|
     t.integer  "member_id",       null: false
@@ -95,6 +109,20 @@ ActiveRecord::Schema.define(version: 20160415221026) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  create_table "vehicles", force: :cascade do |t|
+    t.integer  "year"
+    t.string   "make"
+    t.string   "model"
+    t.string   "vin"
+    t.binary   "image"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.integer  "user_id"
+    t.string   "content_type"
+  end
+
+  add_index "vehicles", ["user_id"], name: "index_vehicles_on_user_id", using: :btree
+
   create_table "vendors", force: :cascade do |t|
     t.text     "name"
     t.datetime "created_at", null: false
@@ -105,6 +133,8 @@ ActiveRecord::Schema.define(version: 20160415221026) do
   add_foreign_key "accounts", "users"
   add_foreign_key "aliases", "accounts"
   add_foreign_key "aliases", "vendors"
+  add_foreign_key "fillups", "vehicles"
   add_foreign_key "transactions", "accounts"
   add_foreign_key "transactions", "vendors"
+  add_foreign_key "vehicles", "users"
 end

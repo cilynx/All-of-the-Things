@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  resources :fillups
+  resources :vehicles
+  get 'vehicles/:id/image' => 'vehicles#image', as: :vehicle_image
+  post 'vehicles/:id/fillup' => 'vehicles#fillup', as: :vehicle_fillup
   resources :aliases
   resources :transactions
   resources :vendors

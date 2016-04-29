@@ -6,6 +6,7 @@ class User < ActiveRecord::Base
 
   groupify :named_group_member
 
+  has_many :vehicles
   has_many :accounts
   has_many :transactions, through: :accounts
 end
