@@ -1,0 +1,44 @@
+<div class="panel panel-primary">
+   <div class="panel-heading">
+      <%= @vehicle.year %> <%= @vehicle.make %> <%= @vehicle.model %> <% if @vehicle.vin != "" %> (<%= @vehicle.vin %>) <% end %>
+      <%= link_to content_tag(:span, nil, { :class => 'glyphicon glyphicon-edit pull-right', :style => 'color:white' }), edit_vehicle_path(@vehicle) %>
+   </div>
+   <div class="panel-body">
+      <div class="alert alert-info">
+	 <h2>Upcoming Service:</h2>
+	 <table class="table">
+	    <tr><td>Oil Change</td><td>70,000</td><td>945</td></tr>
+	    <tr><td>Rotate Tires</td><td>70,000</td><td>945</td></tr>
+	 </table>
+      </div>
+   </div>
+   <table class="table table-striped">
+      <% @vehicle.fillups.each do |fillup| %>
+	 <tr>
+	    <td><%= fillup.date %></td>
+	    <td><%= fillup.odometer %></td>
+	    <td><%= fillup.brand %></td>
+	    <td><%= fillup.grade %></td>
+	    <td><%= fillup.gallons %></td>
+	    <td><%= fillup.ppg %></td>
+	 </tr>
+      <% end %>
+
+      <%= form_for(:fillup, url: vehicle_fillup_path) do |f| %>
+	 <tr>
+	    <td><%= f.date_select(:date, :class => 'form-control', :placeholder => 'date') %></td>
+	    <td><%= f.number_field(:odometer, :class => 'form-control', :placeholder => 'odometer') %></td>
+	    <td><%= f.text_field(:brand, :class => 'form-control', :placeholder => 'brand') %></td>
+	    <td><%= f.text_field(:grade, :class => 'form-control', :placeholder => 'grade') %></td>
+	    <td><%= f.number_field(:gallons, :class => 'form-control', :placeholder => 'gallons', :step => 0.001) %></td>
+	    <td><%= f.number_field(:ppg, :class => 'form-control', :placeholder => 'ppg', :step => 0.001) %></td>
+	    <td><%= f.submit("Add", :class => 'btn btn-default') %></td>
+	 </tr>
+      <% end %>
+
+   </table>
+   <br>
+   <div class="panel-footer">
+      &nbsp;
+   </div>
+</div>

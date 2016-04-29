@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @fillup.date %>
+</p>
+
+<p>
+  <strong>Odometer:</strong>
+  <%= @fillup.odometer %>
+</p>
+
+<p>
+  <strong>Gallons:</strong>
+  <%= @fillup.gallons %>
+</p>
+
+<p>
+  <strong>Ppg:</strong>
+  <%= @fillup.ppg %>
+</p>
+
+<p>
+  <strong>Brand:</strong>
+  <%= @fillup.brand %>
+</p>
+
+<p>
+  <strong>Grade:</strong>
+  <%= @fillup.grade %>
+</p>
+
+<%= link_to 'Edit', edit_fillup_path(@fillup) %> |
+<%= link_to 'Back', fillups_path %>

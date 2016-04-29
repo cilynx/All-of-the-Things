@@ -1,0 +1,14 @@
+<div class="panel panel-primary">
+   <div class="panel-heading">Add a Vehicle</div>
+   <div class="panel-body">
+      <%= form_for(:vehicle, url: '/vehicles', html: { :class => "form-inline" }) do |f| %>
+	 <div class="form-group">
+	    <%= f.number_field(:year, { :class => 'form-control', :placeholder => 'year' }) %>
+	    <%= f.text_field(:make , { :class => 'form-control', :placeholder => 'make' }) %>
+	    <%= f.text_field(:model, { :class => 'form-control', :placeholder => 'model' }) %>
+	    <%= f.text_field(:vin, { :class => 'form-control', :placeholder => 'vin' }) %>
+	    <%= f.submit("Add Vehicle", { :class => 'btn btn-submit' }) %>
+	 </div>
+      <% end %>
+   </div>
+</div>
