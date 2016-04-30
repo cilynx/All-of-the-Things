@@ -26,7 +26,18 @@
 	 </tr>
       </thead>
       <tbody>
-	 <% @vehicle.fillups.each do |fillup| %>
+	 <%= form_for(:fillup, url: vehicle_fillup_path) do |f| %>
+	    <tr>
+	       <td><%= f.date_select(:date, :class => 'form-control', :placeholder => 'date') %></td>
+	       <td><%= f.number_field(:odometer, :class => 'form-control', :placeholder => 'odometer') %></td>
+	       <td><%= f.text_field(:brand, :class => 'form-control', :placeholder => 'brand') %></td>
+	       <td><%= f.text_field(:grade, :class => 'form-control', :placeholder => 'grade') %></td>
+	       <td><%= f.number_field(:gallons, :class => 'form-control', :placeholder => 'gallons', :step => 0.001) %></td>
+	       <td><%= f.number_field(:ppg, :class => 'form-control', :placeholder => 'ppg', :step => 0.001) %></td>
+	       <td colspan=2><%= f.submit("Fillup", :class => 'btn btn-default') %></td>
+	    </tr>
+	 <% end %>
+	 <% @vehicle.fillups.sort { |a,b| a.date <=> b.date }.reverse.each do |fillup| %>
 	    <tr>
 	       <td><%= fillup.date %></td>
 	       <td><%= fillup.odometer %></td>
@@ -37,28 +48,20 @@
 	       <td>$<%= number_with_precision fillup.ppg * fillup.gallons, :precision => 2 %></td>
 	       <td>
 		  <% if @last %>
-		     <%= number_with_precision (@last.odometer - fillup.odometer) / fillup.gallons, :precision => 0 %>
+		     <%= number_with_precision (@last.odometer - fillup.odometer) / @last.gallons, :precision => 0 %>
 		  <% end %>
 	       </td>
 	    </tr>
 	    <% @last = fillup %>
 	 <% end %>
-
-	 <%= form_for(:fillup, url: vehicle_fillup_path) do |f| %>
-	    <tr>
-	       <td><%= f.date_select(:date, :class => 'form-control', :placeholder => 'date') %></td>
-	       <td><%= f.number_field(:odometer, :class => 'form-control', :placeholder => 'odometer') %></td>
-	       <td><%= f.text_field(:brand, :class => 'form-control', :placeholder => 'brand') %></td>
-	       <td><%= f.text_field(:grade, :class => 'form-control', :placeholder => 'grade') %></td>
-	       <td><%= f.number_field(:gallons, :class => 'form-control', :placeholder => 'gallons', :step => 0.001) %></td>
-	       <td><%= f.number_field(:ppg, :class => 'form-control', :placeholder => 'ppg', :step => 0.001) %></td>
-	       <td colspan=2><%= f.submit("Add", :class => 'btn btn-default') %></td>
-	    </tr>
-	 <% end %>
       </tbody>
    </table>
    <br>
    <div class="panel-footer">
-      &nbsp;
+      <%= form_tag import_vehicle_fillups_path, multipart: true, class: 'form-inline pull-right' do %>
+	 <%= file_field_tag :file, class: 'form-control' %>
+	 <%= submit_tag "Import", class: 'btn btn-submit' %>
+      <% end %>
+      <%= link_to content_tag(:span, nil, :class => 'glyphicon glyphicon-download-alt', :title => 'Download (JSON)'), vehicle_path(:format => 'json') %>
    </div>
 </div>

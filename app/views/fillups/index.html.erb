@@ -2,9 +2,10 @@
 
 <h1>Listing Fillups</h1>
 
-<table>
+<table class="table table-striped">
   <thead>
     <tr>
+      <th>Vehicle</th>
       <th>Date</th>
       <th>Odometer</th>
       <th>Gallons</th>
@@ -18,6 +19,7 @@
   <tbody>
     <% @fillups.each do |fillup| %>
       <tr>
+        <td><%= link_to fillup.vehicle.model, vehicle_path(fillup.vehicle) %></td>
         <td><%= fillup.date %></td>
         <td><%= fillup.odometer %></td>
         <td><%= fillup.gallons %></td>
