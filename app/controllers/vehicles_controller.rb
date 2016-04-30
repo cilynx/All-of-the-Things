@@ -1,5 +1,5 @@
 class VehiclesController < ApplicationController
-   before_action :set_vehicle, only: [:show, :edit, :update, :destroy, :image, :fillup]
+   before_action :set_vehicle, only: [:show, :edit, :update, :destroy, :image, :fillup, :import]
 
    # GET /vehicles
    # GET /vehicles.json
@@ -19,6 +19,11 @@ class VehiclesController < ApplicationController
 
    # GET /vehicles/1/edit
    def edit
+   end
+
+   # POST /accounts/1/import
+   def import
+      redirect_to :back, notice: Vehicle.import(params[:file], @vehicle.id)
    end
 
    # GET /vehicles/1/image

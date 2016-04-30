@@ -3,10 +3,12 @@ Rails.application.routes.draw do
   resources :vehicles
   get 'vehicles/:id/image' => 'vehicles#image', as: :vehicle_image
   post 'vehicles/:id/fillup' => 'vehicles#fillup', as: :vehicle_fillup
+  post 'vehicles/:id/import' => 'vehicles#import', as: :import_vehicle_fillups
   resources :aliases
   resources :transactions
   resources :vendors
   resources :accounts
+  post 'accounts/:id/import' => 'accounts#import', as: :import_account_transactions
   resources :checking_accounts, controller: 'accounts', type: 'CheckingAccount'
   resources :stock_accounts, controller: 'accounts', type: 'StockAccount'
   get 'welcome/index'
@@ -20,7 +22,6 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'welcome#index'
 
-  post 'account/:id/import' => 'accounts#import', as: :import_account_transactions
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
