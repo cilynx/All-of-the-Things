@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Maintenances</h1>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th>Page</th>
+      <th>Pdf</th>
+      <th>InspectMiles</th>
+      <th>InspectMonths</th>
+      <th>ReplaceMiles</th>
+      <th>ReplaceMonths</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @maintenances.each do |maintenance| %>
+      <tr>
+        <td><%= maintenance.item %></td>
+        <td><%= maintenance.page %></td>
+        <td><%= maintenance.pdf %></td>
+        <td><%= maintenance.inspectMiles %></td>
+        <td><%= maintenance.inspectMonths %></td>
+        <td><%= maintenance.replaceMiles %></td>
+        <td><%= maintenance.replaceMonths %></td>
+        <td><%= link_to 'Show', maintenance %></td>
+        <td><%= link_to 'Edit', edit_maintenance_path(maintenance) %></td>
+        <td><%= link_to 'Destroy', maintenance, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Maintenance', new_maintenance_path %>

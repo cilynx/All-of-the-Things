@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Make:</strong>
+  <%= @canonical_vehicle.make %>
+</p>
+
+<p>
+  <strong>Model:</strong>
+  <%= @canonical_vehicle.model %>
+</p>
+
+<p>
+  <strong>Year:</strong>
+  <%= @canonical_vehicle.year %>
+</p>
+
+<%= link_to 'Edit', edit_canonical_vehicle_path(@canonical_vehicle) %> |
+<%= link_to 'Back', canonical_vehicles_path %>

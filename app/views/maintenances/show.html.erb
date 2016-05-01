@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Item:</strong>
+  <%= @maintenance.item %>
+</p>
+
+<p>
+  <strong>Page:</strong>
+  <%= @maintenance.page %>
+</p>
+
+<p>
+  <strong>Pdf:</strong>
+  <%= @maintenance.pdf %>
+</p>
+
+<p>
+  <strong>Inspectmiles:</strong>
+  <%= @maintenance.inspectMiles %>
+</p>
+
+<p>
+  <strong>Inspectmonths:</strong>
+  <%= @maintenance.inspectMonths %>
+</p>
+
+<p>
+  <strong>Replecmiles:</strong>
+  <%= @maintenance.replaceMiles %>
+</p>
+
+<p>
+  <strong>Replacemonths:</strong>
+  <%= @maintenance.replaceMonths %>
+</p>
+
+<%= link_to 'Edit', edit_maintenance_path(@maintenance) %> |
+<%= link_to 'Back', maintenances_path %>

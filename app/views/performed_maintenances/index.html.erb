@@ -1,0 +1,27 @@
+<h1>Listing Performed Maintenances</h1>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Maintenance</th>
+      <th>Service</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @performed_maintenances.each do |performed_maintenance| %>
+      <tr>
+        <td><%= performed_maintenance.maintenance %></td>
+        <td><%= performed_maintenance.service %></td>
+        <td><%= link_to 'Show', performed_maintenance %></td>
+        <td><%= link_to 'Edit', edit_performed_maintenance_path(performed_maintenance) %></td>
+        <td><%= link_to 'Destroy', performed_maintenance, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Performed maintenance', new_performed_maintenance_path %>

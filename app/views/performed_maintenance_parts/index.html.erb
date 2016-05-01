@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Performed Maintenance Parts</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Performed maintenance</th>
+      <th>Part</th>
+      <th>Cost</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @performed_maintenance_parts.each do |performed_maintenance_part| %>
+      <tr>
+        <td><%= performed_maintenance_part.performed_maintenance %></td>
+        <td><%= performed_maintenance_part.part %></td>
+        <td><%= performed_maintenance_part.cost %></td>
+        <td><%= link_to 'Show', performed_maintenance_part %></td>
+        <td><%= link_to 'Edit', edit_performed_maintenance_part_path(performed_maintenance_part) %></td>
+        <td><%= link_to 'Destroy', performed_maintenance_part, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Performed maintenance part', new_performed_maintenance_part_path %>

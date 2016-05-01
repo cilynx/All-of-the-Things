@@ -4,6 +4,10 @@ class Vehicle < ActiveRecord::Base
 
   has_many :fillups
 
+  def to_s
+     return self.canonical_vehicle.to_s
+  end
+
   def image_file=(input_data)
      self.image = input_data.read
      self.content_type = input_data.content_type.chomp

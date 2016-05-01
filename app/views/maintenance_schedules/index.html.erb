@@ -1,0 +1,30 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Maintenance Schedules</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @maintenance_schedules.each do |maintenance_schedule| %>
+      <tr>
+        <td><%= link_to 'Show', maintenance_schedule %></td>
+        <td><%= link_to 'Edit', edit_maintenance_schedule_path(maintenance_schedule) %></td>
+        <td><%= link_to 'Destroy', maintenance_schedule, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= form_tag import_maintenance_schedule_path, multipart: true, class: 'form-inline' do %>
+   <%= file_field_tag :file, class: 'form-control' %>
+   <%= submit_tag "Import", class: 'btn btn-submit' %>
+<% end %>
+
+<br>
+
+<%= link_to 'New Maintenance schedule', new_maintenance_schedule_path %>

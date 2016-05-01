@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  resources :performed_maintenances
+  resources :performed_maintenance_parts
+  resources :parts
   resources :services
   resources :maintenances
   resources :maintenance_schedules

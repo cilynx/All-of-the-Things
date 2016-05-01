@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160501024643) do
+ActiveRecord::Schema.define(version: 20160501055508) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -104,6 +104,37 @@ ActiveRecord::Schema.define(version: 20160501024643) do
 
   add_index "maintenances", ["maintenance_schedule_id"], name: "index_maintenances_on_maintenance_schedule_id", using: :btree
 
+  create_table "parts", force: :cascade do |t|
+    t.string   "pn"
+    t.string   "description"
+    t.string   "url"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "performed_maintenance_parts", force: :cascade do |t|
+    t.integer  "performed_maintenance_id"
+    t.integer  "part_id"
+    t.decimal  "cost"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  add_index "performed_maintenance_parts", ["part_id"], name: "index_performed_maintenance_parts_on_part_id", using: :btree
+  add_index "performed_maintenance_parts", ["performed_maintenance_id"], name: "index_performed_maintenance_parts_on_performed_maintenance_id", using: :btree
+
+  create_table "performed_maintenances", force: :cascade do |t|
+    t.integer  "maintenance_id"
+    t.integer  "service_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.decimal  "laborHours"
+    t.decimal  "laborRate"
+  end
+
+  add_index "performed_maintenances", ["maintenance_id"], name: "index_performed_maintenances_on_maintenance_id", using: :btree
+  add_index "performed_maintenances", ["service_id"], name: "index_performed_maintenances_on_service_id", using: :btree
+
   create_table "services", force: :cascade do |t|
     t.date     "date"
     t.integer  "odometer"
@@ -111,6 +142,7 @@ ActiveRecord::Schema.define(version: 20160501024643) do
     t.integer  "vehicle_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal  "tax"
   end
 
   add_index "services", ["vehicle_id"], name: "index_services_on_vehicle_id", using: :btree
@@ -188,6 +220,10 @@ ActiveRecord::Schema.define(version: 20160501024643) do
   add_foreign_key "canonical_vehicles", "maintenance_schedules"
   add_foreign_key "fillups", "vehicles"
   add_foreign_key "maintenances", "maintenance_schedules"
+  add_foreign_key "performed_maintenance_parts", "parts"
+  add_foreign_key "performed_maintenance_parts", "performed_maintenances"
+  add_foreign_key "performed_maintenances", "maintenances"
+  add_foreign_key "performed_maintenances", "services"
   add_foreign_key "services", "vehicles"
   add_foreign_key "steps", "maintenances"
   add_foreign_key "transactions", "accounts"
