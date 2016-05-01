@@ -1,6 +1,6 @@
 <div class="panel panel-primary">
    <div class="panel-heading">
-      <%= @vehicle.year %> <%= @vehicle.make %> <%= @vehicle.model %> <% if @vehicle.vin != "" %> (<%= @vehicle.vin %>) <% end %>
+      <%= @vehicle.canonical_vehicle.year %> <%= @vehicle.canonical_vehicle.make %> <%= @vehicle.canonical_vehicle.model %> <% if @vehicle.vin != "" %> (<%= @vehicle.vin %>) <% end %>
       <%= link_to content_tag(:span, nil, { :class => 'glyphicon glyphicon-edit pull-right', :style => 'color:white' }), edit_vehicle_path(@vehicle) %>
    </div>
    <div class="panel-body">

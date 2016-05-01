@@ -3,9 +3,7 @@
    <div class="panel-body">
       <%= form_for(:vehicle, url: '/vehicles', html: { :class => "form-inline" }) do |f| %>
 	 <div class="form-group">
-	    <%= f.number_field(:year, { :class => 'form-control', :placeholder => 'year' }) %>
-	    <%= f.text_field(:make , { :class => 'form-control', :placeholder => 'make' }) %>
-	    <%= f.text_field(:model, { :class => 'form-control', :placeholder => 'model' }) %>
+	    <%= f.select :canonical_vehicle_id, options_for_select(CanonicalVehicle.order(:year, :make, :model).map{|s|[s.year.to_s + ' ' + s.make + ' ' + s.model, s.id]}) %>
 	    <%= f.text_field(:vin, { :class => 'form-control', :placeholder => 'vin' }) %>
 	    <%= f.submit("Add Vehicle", { :class => 'btn btn-submit' }) %>
 	 </div>
