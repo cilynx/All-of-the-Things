@@ -1,0 +1,25 @@
+<table class="table table-striped">
+   <tr>
+      <th>Maintenance</th>
+      <td><%= link_to @performed_maintenance.maintenance, maintenance_path(@performed_maintenance.maintenance) %></td>
+   </tr>
+   <tr>
+      <th>Service</th>
+      <td><%= link_to @performed_maintenance.service, service_path(@performed_maintenance.service) %></td>
+   </tr>
+   <% if @performed_maintenance.laborRate && @performed_maintenance.laborHours %>
+      <tr>
+	 <th>Labor</th>
+	 <td><%= @performed_maintenance.laborHours %> X <%= @performed_maintenance.laborRate %> = <%= @performed_maintenance.laborHours * @performed_maintenance.laborRate %></td>
+      </tr>
+   <% end %>
+   <% @performed_maintenance.performed_maintenance_parts.each do |pmp| %>
+      <tr>
+	 <th>Parts</th>
+	 <td><%= pmp.part.description %></td>
+      </tr>
+   <% end %>
+</table>
+
+<%= link_to 'Edit', edit_performed_maintenance_path(@performed_maintenance) %> |
+<%= link_to 'Back', performed_maintenances_path %>

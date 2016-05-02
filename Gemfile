@@ -40,6 +40,9 @@ gem 'less-rails-bootstrap'
 # OFX/QFX import for Accounts
 gem 'ofx-parser'
 
+# Kaminari for pagination
+gem 'kaminari'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 

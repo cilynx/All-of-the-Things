@@ -1,6 +1,6 @@
 <div class="panel panel-primary">
    <div class="panel-heading">
-      <%= @vehicle.year %> <%= @vehicle.make %> <%= @vehicle.model %> <% if @vehicle.vin != "" %> (<%= @vehicle.vin %>) <% end %>
+      <%= @vehicle.canonical_vehicle.year %> <%= @vehicle.canonical_vehicle.make %> <%= @vehicle.canonical_vehicle.model %> <% if @vehicle.vin != "" %> (<%= @vehicle.vin %>) <% end %>
       <%= link_to content_tag(:span, nil, { :class => 'glyphicon glyphicon-edit pull-right', :style => 'color:white' }), edit_vehicle_path(@vehicle) %>
    </div>
    <div class="panel-body">
@@ -11,51 +11,51 @@
 	    <tr><td>Rotate Tires</td><td>70,000</td><td>945</td></tr>
 	 </table>
       </div>
+      <table class="table table-striped">
+	 <thead>
+	    <tr>
+	       <th>Date</th>
+	       <th>Odometer</th>
+	       <th>Brand</th>
+	       <th>Grade</th>
+	       <th>Gallon</th>
+	       <th>PPG</th>
+	       <th>Cost</th>
+	       <th>MPG</th>
+	    </tr>
+	 </thead>
+	 <tbody>
+	    <%= form_for(:fillup, url: vehicle_fillup_path) do |f| %>
+	       <tr>
+		  <td><%= f.date_select(:date, :class => 'form-control', :placeholder => 'date') %></td>
+		  <td><%= f.number_field(:odometer, :class => 'form-control', :placeholder => 'odometer') %></td>
+		  <td><%= f.text_field(:brand, :class => 'form-control', :placeholder => 'brand') %></td>
+		  <td><%= f.text_field(:grade, :class => 'form-control', :placeholder => 'grade') %></td>
+		  <td><%= f.number_field(:gallons, :class => 'form-control', :placeholder => 'gallons', :step => 0.001) %></td>
+		  <td><%= f.number_field(:ppg, :class => 'form-control', :placeholder => 'ppg', :step => 0.001) %></td>
+		  <td colspan=2><%= f.submit("Fillup", :class => 'btn btn-default') %></td>
+	       </tr>
+	    <% end %>
+	    <% @vehicle.fillups.sort { |a,b| a.date <=> b.date }.reverse.each do |fillup| %>
+	       <tr>
+		  <td><%= fillup.date %></td>
+		  <td><%= fillup.odometer %></td>
+		  <td><%= fillup.brand %></td>
+		  <td><%= fillup.grade %></td>
+		  <td><%= fillup.gallons %></td>
+		  <td>$<%= fillup.ppg %></td>
+		  <td>$<%= number_with_precision fillup.ppg * fillup.gallons, :precision => 2 %></td>
+		  <td>
+		     <% if @last %>
+			<%= number_with_precision (@last.odometer - fillup.odometer) / @last.gallons, :precision => 0 %>
+		     <% end %>
+		  </td>
+	       </tr>
+	       <% @last = fillup %>
+	    <% end %>
+	 </tbody>
+      </table>
    </div>
-   <table class="table table-striped">
-      <thead>
-	 <tr>
-	    <th>Date</th>
-	    <th>Odometer</th>
-	    <th>Brand</th>
-	    <th>Grade</th>
-	    <th>Gallon</th>
-	    <th>PPG</th>
-	    <th>Cost</th>
-	    <th>MPG</th>
-	 </tr>
-      </thead>
-      <tbody>
-	 <%= form_for(:fillup, url: vehicle_fillup_path) do |f| %>
-	    <tr>
-	       <td><%= f.date_select(:date, :class => 'form-control', :placeholder => 'date') %></td>
-	       <td><%= f.number_field(:odometer, :class => 'form-control', :placeholder => 'odometer') %></td>
-	       <td><%= f.text_field(:brand, :class => 'form-control', :placeholder => 'brand') %></td>
-	       <td><%= f.text_field(:grade, :class => 'form-control', :placeholder => 'grade') %></td>
-	       <td><%= f.number_field(:gallons, :class => 'form-control', :placeholder => 'gallons', :step => 0.001) %></td>
-	       <td><%= f.number_field(:ppg, :class => 'form-control', :placeholder => 'ppg', :step => 0.001) %></td>
-	       <td colspan=2><%= f.submit("Fillup", :class => 'btn btn-default') %></td>
-	    </tr>
-	 <% end %>
-	 <% @vehicle.fillups.sort { |a,b| a.date <=> b.date }.reverse.each do |fillup| %>
-	    <tr>
-	       <td><%= fillup.date %></td>
-	       <td><%= fillup.odometer %></td>
-	       <td><%= fillup.brand %></td>
-	       <td><%= fillup.grade %></td>
-	       <td><%= fillup.gallons %></td>
-	       <td>$<%= fillup.ppg %></td>
-	       <td>$<%= number_with_precision fillup.ppg * fillup.gallons, :precision => 2 %></td>
-	       <td>
-		  <% if @last %>
-		     <%= number_with_precision (@last.odometer - fillup.odometer) / @last.gallons, :precision => 0 %>
-		  <% end %>
-	       </td>
-	    </tr>
-	    <% @last = fillup %>
-	 <% end %>
-      </tbody>
-   </table>
    <br>
    <div class="panel-footer">
       <%= form_tag import_vehicle_fillups_path, multipart: true, class: 'form-inline pull-right' do %>

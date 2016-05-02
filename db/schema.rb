@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160429062655) do
+ActiveRecord::Schema.define(version: 20160501055508) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,17 @@ ActiveRecord::Schema.define(version: 20160429062655) do
 
   add_index "aliases", ["account_id"], name: "index_aliases_on_account_id", using: :btree
   add_index "aliases", ["vendor_id"], name: "index_aliases_on_vendor_id", using: :btree
+
+  create_table "canonical_vehicles", force: :cascade do |t|
+    t.string   "make"
+    t.string   "model"
+    t.integer  "year"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.integer  "maintenance_schedule_id"
+  end
+
+  add_index "canonical_vehicles", ["maintenance_schedule_id"], name: "index_canonical_vehicles_on_maintenance_schedule_id", using: :btree
 
   create_table "fillups", force: :cascade do |t|
     t.date     "date"
@@ -72,6 +83,80 @@ ActiveRecord::Schema.define(version: 20160429062655) do
   create_table "groups", force: :cascade do |t|
     t.string "type"
   end
+
+  create_table "maintenance_schedules", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "maintenances", force: :cascade do |t|
+    t.string   "item"
+    t.string   "page"
+    t.integer  "pdf"
+    t.integer  "inspectMiles"
+    t.integer  "inspectMonths"
+    t.integer  "replaceMonths"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.integer  "maintenance_schedule_id"
+    t.integer  "replaceMiles"
+  end
+
+  add_index "maintenances", ["maintenance_schedule_id"], name: "index_maintenances_on_maintenance_schedule_id", using: :btree
+
+  create_table "parts", force: :cascade do |t|
+    t.string   "pn"
+    t.string   "description"
+    t.string   "url"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "performed_maintenance_parts", force: :cascade do |t|
+    t.integer  "performed_maintenance_id"
+    t.integer  "part_id"
+    t.decimal  "cost"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  add_index "performed_maintenance_parts", ["part_id"], name: "index_performed_maintenance_parts_on_part_id", using: :btree
+  add_index "performed_maintenance_parts", ["performed_maintenance_id"], name: "index_performed_maintenance_parts_on_performed_maintenance_id", using: :btree
+
+  create_table "performed_maintenances", force: :cascade do |t|
+    t.integer  "maintenance_id"
+    t.integer  "service_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.decimal  "laborHours"
+    t.decimal  "laborRate"
+  end
+
+  add_index "performed_maintenances", ["maintenance_id"], name: "index_performed_maintenances_on_maintenance_id", using: :btree
+  add_index "performed_maintenances", ["service_id"], name: "index_performed_maintenances_on_service_id", using: :btree
+
+  create_table "services", force: :cascade do |t|
+    t.date     "date"
+    t.integer  "odometer"
+    t.string   "location"
+    t.integer  "vehicle_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.decimal  "tax"
+  end
+
+  add_index "services", ["vehicle_id"], name: "index_services_on_vehicle_id", using: :btree
+
+  create_table "steps", force: :cascade do |t|
+    t.string   "text"
+    t.string   "imageMD5"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.integer  "maintenance_id"
+    t.string   "seeAlso",                     array: true
+  end
+
+  add_index "steps", ["maintenance_id"], name: "index_steps_on_maintenance_id", using: :btree
 
   create_table "transactions", force: :cascade do |t|
     t.date     "date"
@@ -110,17 +195,16 @@ ActiveRecord::Schema.define(version: 20160429062655) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "vehicles", force: :cascade do |t|
-    t.integer  "year"
-    t.string   "make"
-    t.string   "model"
     t.string   "vin"
     t.binary   "image"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
     t.integer  "user_id"
     t.string   "content_type"
+    t.integer  "canonical_vehicle_id"
   end
 
+  add_index "vehicles", ["canonical_vehicle_id"], name: "index_vehicles_on_canonical_vehicle_id", using: :btree
   add_index "vehicles", ["user_id"], name: "index_vehicles_on_user_id", using: :btree
 
   create_table "vendors", force: :cascade do |t|
@@ -133,8 +217,17 @@ ActiveRecord::Schema.define(version: 20160429062655) do
   add_foreign_key "accounts", "users"
   add_foreign_key "aliases", "accounts"
   add_foreign_key "aliases", "vendors"
+  add_foreign_key "canonical_vehicles", "maintenance_schedules"
   add_foreign_key "fillups", "vehicles"
+  add_foreign_key "maintenances", "maintenance_schedules"
+  add_foreign_key "performed_maintenance_parts", "parts"
+  add_foreign_key "performed_maintenance_parts", "performed_maintenances"
+  add_foreign_key "performed_maintenances", "maintenances"
+  add_foreign_key "performed_maintenances", "services"
+  add_foreign_key "services", "vehicles"
+  add_foreign_key "steps", "maintenances"
   add_foreign_key "transactions", "accounts"
   add_foreign_key "transactions", "vendors"
+  add_foreign_key "vehicles", "canonical_vehicles"
   add_foreign_key "vehicles", "users"
 end

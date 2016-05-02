@@ -1,0 +1,2 @@
+module CanonicalVehiclesHelper
+end

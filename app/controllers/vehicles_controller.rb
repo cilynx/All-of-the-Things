@@ -10,6 +10,7 @@ class VehiclesController < ApplicationController
    # GET /vehicles/1
    # GET /vehicles/1.json
    def show
+#      @fillups = Kaminari.paginate_array(@vehicle.fillups.sort { |a,b| a.date <=> b.date }.reverse).page(params[:page]).per(10)
    end
 
    # GET /vehicles/new
@@ -88,7 +89,7 @@ class VehiclesController < ApplicationController
 
    # Never trust parameters from the scary internet, only allow the white list through.
    def vehicle_params
-      params.require(:vehicle).permit(:year, :make, :model, :vin, :user_id, :image_file)
+      params.require(:vehicle).permit(:vin, :user_id, :image_file, :canonical_vehicle_id)
    end
 
    def fillup_params

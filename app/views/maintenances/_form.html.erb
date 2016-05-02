@@ -1,0 +1,45 @@
+<%= form_for(@maintenance) do |f| %>
+  <% if @maintenance.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@maintenance.errors.count, "error") %> prohibited this maintenance from being saved:</h2>
+
+      <ul>
+      <% @maintenance.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :item %><br>
+    <%= f.text_field :item %>
+  </div>
+  <div class="field">
+    <%= f.label :page %><br>
+    <%= f.text_field :page %>
+  </div>
+  <div class="field">
+    <%= f.label :pdf %><br>
+    <%= f.number_field :pdf %>
+  </div>
+  <div class="field">
+    <%= f.label :inspectMiles %><br>
+    <%= f.number_field :inspectMiles %>
+  </div>
+  <div class="field">
+    <%= f.label :inspectMonths %><br>
+    <%= f.number_field :inspectMonths %>
+  </div>
+  <div class="field">
+    <%= f.label :replaceMiles %><br>
+    <%= f.number_field :replaceMiles %>
+  </div>
+  <div class="field">
+    <%= f.label :replaceMonths %><br>
+    <%= f.number_field :replaceMonths %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

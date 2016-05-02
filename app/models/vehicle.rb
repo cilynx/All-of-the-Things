@@ -1,7 +1,12 @@
 class Vehicle < ActiveRecord::Base
   belongs_to :user, inverse_of: :vehicles
+  belongs_to :canonical_vehicle, inverse_of: :vehicles
 
   has_many :fillups
+
+  def to_s
+     return self.canonical_vehicle.to_s
+  end
 
   def image_file=(input_data)
      self.image = input_data.read

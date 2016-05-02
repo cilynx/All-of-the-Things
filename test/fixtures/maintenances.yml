@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  item: MyString
+  page: MyString
+  pdf: 1
+  inspectMiles: 1
+  inspectMonths: 1
+  replecMiles: 1
+  replaceMonths: 1
+
+two:
+  item: MyString
+  page: MyString
+  pdf: 1
+  inspectMiles: 1
+  inspectMonths: 1
+  replecMiles: 1
+  replaceMonths: 1

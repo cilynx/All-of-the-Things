@@ -1,4 +1,13 @@
 Rails.application.routes.draw do
+  resources :performed_maintenances
+  resources :performed_maintenance_parts
+  resources :parts
+  resources :services
+  resources :maintenances
+  resources :maintenance_schedules
+  post 'maintenance_schedules/import' => 'maintenance_schedules#import', as: :import_maintenance_schedule
+  resources :canonical_vehicles
+  resources :steps
   resources :fillups
   resources :vehicles
   get 'vehicles/:id/image' => 'vehicles#image', as: :vehicle_image

@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Performed maintenance:</strong>
+  <%= @performed_maintenance_part.performed_maintenance %>
+</p>
+
+<p>
+  <strong>Part:</strong>
+  <%= @performed_maintenance_part.part %>
+</p>
+
+<p>
+  <strong>Cost:</strong>
+  <%= @performed_maintenance_part.cost %>
+</p>
+
+<%= link_to 'Edit', edit_performed_maintenance_part_path(@performed_maintenance_part) %> |
+<%= link_to 'Back', performed_maintenance_parts_path %>

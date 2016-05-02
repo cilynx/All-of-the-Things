@@ -4,7 +4,7 @@
 	 <div class="thumbnail">
 	    <%= link_to image_tag(vehicle_image_path(vehicle)), vehicle %>
 	    <div class="caption">
-	       <%= vehicle.year %> <%= vehicle.make %> <%= vehicle.model %><br>
+	       <%= vehicle.canonical_vehicle.year %> <%= vehicle.canonical_vehicle.make %> <%= vehicle.canonical_vehicle.model %><br>
 	       [ <%= link_to 'Show', vehicle %> | <%= link_to 'Destroy', vehicle, method: :delete, data: { confirm: 'Are you sure?' } %> ]
 	    </div>
 	 </div>
@@ -12,9 +12,7 @@
    <% end %>
 </div>
 <%= form_for(:vehicle, url: vehicles_path, html: { :class => "form-inline" }) do |f| %>
-   <%= f.number_field(:year, { :class => 'form-control', :placeholder => 'year' }) %>
-   <%= f.text_field(:make , { :class => 'form-control', :placeholder => 'make' }) %>
-   <%= f.text_field(:model, { :class => 'form-control', :placeholder => 'model' }) %>
+   <%= f.select :canonical_vehicle_id, options_for_select(CanonicalVehicle.order(:year, :make, :model)) %>
    <%= f.text_field(:vin, { :class => 'form-control', :placeholder => 'vin' }) %>
    <%= f.submit("Add New", { :class => 'btn btn-default' }) %>
    <%= f.file_field(:image_file, { :style => 'padding-top:1em' }) %>

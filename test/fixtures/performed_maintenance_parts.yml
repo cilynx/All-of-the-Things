@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  performed_maintenance_id: 
+  part_id: 
+  cost: 9.99
+
+two:
+  performed_maintenance_id: 
+  part_id: 
+  cost: 9.99
