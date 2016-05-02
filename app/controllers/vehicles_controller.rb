@@ -10,6 +10,7 @@ class VehiclesController < ApplicationController
    # GET /vehicles/1
    # GET /vehicles/1.json
    def show
+#      @fillups = Kaminari.paginate_array(@vehicle.fillups.sort { |a,b| a.date <=> b.date }.reverse).page(params[:page]).per(10)
    end
 
    # GET /vehicles/new
