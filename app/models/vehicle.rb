@@ -3,6 +3,7 @@ class Vehicle < ActiveRecord::Base
   belongs_to :canonical_vehicle, inverse_of: :vehicles
 
   has_many :fillups
+  has_many :services
 
   def to_s
      return self.canonical_vehicle.to_s
