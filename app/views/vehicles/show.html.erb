@@ -1,87 +1,124 @@
 <div class="panel panel-primary">
-   <div class="panel-heading">
-      <%= @vehicle.canonical_vehicle.year %> <%= @vehicle.canonical_vehicle.make %> <%= @vehicle.canonical_vehicle.model %> <% if @vehicle.vin != "" %> (<%= @vehicle.vin %>) <% end %>
-      <%= link_to content_tag(:span, nil, { :class => 'glyphicon glyphicon-edit pull-right', :style => 'color:white' }), edit_vehicle_path(@vehicle) %>
-   </div>
-   <div class="panel-body">
-      <div class="alert alert-info">
-	 <h2>Upcoming Service:</h2>
-	 <table class="table">
-	    <tr><td>Oil Change</td><td>70,000</td><td>945</td></tr>
-	    <tr><td>Rotate Tires</td><td>70,000</td><td>945</td></tr>
-	 </table>
-      </div>
-      <h3>Mileage History</h3>
-      <table class="table table-striped" style="display:block; overflow:auto; max-height: 20em">
-	<thead>
-	    <tr>
-	       <th>Date</th>
-	       <th>Odometer</th>
-	       <th>Brand</th>
-	       <th>Grade</th>
-	       <th>Gallon</th>
-	       <th>PPG</th>
-	       <th>Cost</th>
-	       <th>MPG</th>
-	    </tr>
-	 </thead>
-	 <tbody>
-	    <%= form_for(:fillup, url: vehicle_fillup_path) do |f| %>
-	       <tr>
-		  <td><%= f.date_select(:date, :class => 'form-control', :placeholder => 'date') %></td>
-		  <td><%= f.number_field(:odometer, :class => 'form-control', :placeholder => 'odometer') %></td>
-		  <td><%= f.text_field(:brand, :class => 'form-control', :placeholder => 'brand') %></td>
-		  <td><%= f.text_field(:grade, :class => 'form-control', :placeholder => 'grade') %></td>
-		  <td><%= f.number_field(:gallons, :class => 'form-control', :placeholder => 'gallons', :step => 0.001) %></td>
-		  <td><%= f.number_field(:ppg, :class => 'form-control', :placeholder => 'ppg', :step => 0.001) %></td>
-		  <td colspan=2><%= f.submit("Fillup", :class => 'btn btn-default') %></td>
-	       </tr>
-	    <% end %>
-	    <% @vehicle.fillups.sort { |a,b| a.date <=> b.date }.reverse.each do |fillup| %>
-	       <tr>
-		  <td><%= fillup.date %></td>
-		  <td><%= fillup.odometer %></td>
-		  <td><%= fillup.brand %></td>
-		  <td><%= fillup.grade %></td>
-		  <td><%= fillup.gallons %></td>
-		  <td>$<%= fillup.ppg %></td>
-		  <td>$<%= number_with_precision fillup.ppg * fillup.gallons, :precision => 2 %></td>
-		  <td>
-		     <% if @last %>
-			<%= number_with_precision (@last.odometer - fillup.odometer) / @last.gallons, :precision => 0 %>
-		     <% end %>
-		  </td>
-	       </tr>
-	       <% @last = fillup %>
-	    <% end %>
-	 </tbody>
-      </table>
-      <h3>Service History</h3>
-      <table class="table table-striped" style="display:block; overflow:auto; max-height: 20em">
-	<thead>
-	  <tr>
-	    <th>Date</th>
-	    <th>Location</th>
-	    <th>Odometer</th>
-	  </tr>
-	</thead>
-	<tbody>
-	  <% @vehicle.services.sort { |a,b| a.date <=> b.date }.reverse.each do |service| %>
-	    <tr>
-	      <td><%= service.date %></td>
-	      <td><%= service.location %></td>
-	      <td><%= service.odometer %></td>
-	    </tr>
-	  <% end %>
-	</tbody>
-      </table>
-   </div>
-   <br>
-   <div class="panel-footer">
-      <%= form_tag import_vehicle_fillups_path, multipart: true, class: 'form-inline pull-right' do %>
-	 <%= file_field_tag :file, class: 'form-control' %>
-	 <%= submit_tag "Import", class: 'btn btn-submit' %>
+  <div class="panel-heading">
+    <%= @vehicle.canonical_vehicle.year %> <%= @vehicle.canonical_vehicle.make %> <%= @vehicle.canonical_vehicle.model %> <% if @vehicle.vin != "" %> (<%= @vehicle.vin %>) <% end %>
+    <%= link_to content_tag(:span, nil, { :class => 'glyphicon glyphicon-edit pull-right', :style => 'color:white' }), edit_vehicle_path(@vehicle) %>
+  </div>
+  <div class="panel-body">
+    <h3>Upcoming Service</h3>
+    <% current_odometer = @vehicle.fillups.order(date: :desc).first.odometer %>
+    <span class="label label-primaly"><%= current_odometer %></span>
+    <table class="table table-striped" style="display:block; overflow:auto; max-height: 20em">
+      <% @vehicle.maintenances.each do |maintenance| %>
+      <% most_recent = maintenance.performed_maintenances.joins(:service).where(services: {vehicle_id: @vehicle.id}).order("services.date DESC").first %>
+      <tr>
+        <td><%= maintenance.item %></td>
+        <td><% if most_recent %><%= most_recent.service.date %><% end %></td>
+        <td><% if most_recent %><%= most_recent.service.odometer %><% end %></td>
+        <td><% if most_recent %><%= current_odometer - most_recent.service.odometer %><% end %></td>
+        <td>
+          <% if most_recent %>
+          <%= maintenance.miles - (current_odometer - most_recent.service.odometer) %>
+          <% else %>
+          <span class="label label-danger">Never Checked</span>
+          <% end %>
+        </td>
+      </tr>
       <% end %>
-      <%= link_to content_tag(:span, nil, :class => 'glyphicon glyphicon-download-alt', :title => 'Download (JSON)'), vehicle_path(:format => 'json') %>
-   </div>
+    </table>
+    <h3>Mileage History</h3>
+    <table class="table table-striped" style="display:block; overflow:auto; max-height: 20em">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Odometer</th>
+          <th>Brand</th>
+          <th>Grade</th>
+          <th>Gallon</th>
+          <th>PPG</th>
+          <th>Cost</th>
+          <th>MPG</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= form_for(:fillup, url: vehicle_fillup_path) do |f| %>
+        <tr>
+          <td><%= f.date_select(:date, :class => 'form-control', :placeholder => 'date') %></td>
+          <td><%= f.number_field(:odometer, :class => 'form-control', :placeholder => 'odometer') %></td>
+          <td><%= f.text_field(:brand, :class => 'form-control', :placeholder => 'brand') %></td>
+          <td><%= f.text_field(:grade, :class => 'form-control', :placeholder => 'grade') %></td>
+          <td><%= f.number_field(:gallons, :class => 'form-control', :placeholder => 'gallons', :step => 0.001) %></td>
+          <td><%= f.number_field(:ppg, :class => 'form-control', :placeholder => 'ppg', :step => 0.001) %></td>
+          <td colspan=2><%= f.submit("Fillup", :class => 'btn btn-default') %></td>
+        </tr>
+        <% end %>
+        <% @vehicle.fillups.sort { |a,b| a.date <=> b.date }.reverse.each do |fillup| %>
+        <tr>
+          <td><%= fillup.date %></td>
+          <td><%= fillup.odometer %></td>
+          <td><%= fillup.brand %></td>
+          <td><%= fillup.grade %></td>
+          <td><%= fillup.gallons %></td>
+          <td>$<%= fillup.ppg %></td>
+          <td>$<%= number_with_precision fillup.ppg * fillup.gallons, :precision => 2 %></td>
+          <td>
+            <% if @last %>
+            <%= number_with_precision (@last.odometer - fillup.odometer) / @last.gallons, :precision => 0 %>
+            <% end %>
+          </td>
+        </tr>
+        <% @last = fillup %>
+        <% end %>
+      </tbody>
+    </table>
+    <h3>Service History</h3>
+    <table class="table table-striped table-hover" style="display:block; overflow:auto; max-height: 20em">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Location</th>
+          <th>Odometer</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @vehicle.services.sort { |a,b| a.date <=> b.date }.reverse.each do |service| %>
+        <tr data-toggle="modal" data-target="#service-<%= service.id %>">
+          <td><%= service.date %></td>
+          <td><%= service.location %></td>
+          <td><%= service.odometer %></td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <% @vehicle.services.sort { |a,b| a.date <=> b.date }.reverse.each do |service| %>
+    <div class="modal fade" id="service-<%= service.id %>">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 class="modal-title"><%= service.location %></h3>
+          </div>
+          <div class="modal-body">
+            <%= render partial: "services/table", locals: {service: service} %>
+          </div>
+          <div class="modal-footer">
+            <span class="label label-primary"><%= service.odometer %></span></h3>
+            <span class="label label-primary"><%= service.date %></span></h3>
+          </div>
+
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+    <% end %>
+  </div>
+
+  <br>
+  <div class="panel-footer">
+    <%= form_tag import_vehicle_fillups_path, multipart: true, class: 'form-inline pull-right' do %>
+    <%= file_field_tag :file, class: 'form-control' %>
+    <%= submit_tag "Import", class: 'btn btn-submit' %>
+    <% end %>
+    <%= link_to content_tag(:span, nil, :class => 'glyphicon glyphicon-download-alt', :title => 'Download (JSON)'), vehicle_path(:format => 'json') %>
+  </div>
 </div>
