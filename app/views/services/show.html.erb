@@ -1,28 +1,14 @@
 <div class="panel panel-primary">
-   <div class="panel-heading">
-      <strong><%= @service.location %> <span class="pull-right"><%= @service.date %></span></strong>
-   </div>
-   <div class="panel-body">
-      <% labor = 0 %>
-      <% sales = 0 %>
-      <table class="table table-striped">
-      <% @service.performed_maintenances.each do |pm| %>
-	 <tr><th colspan=4><%= pm.maintenance.item %></th></tr>
-	 <tr><th>&nbsp;&nbsp;&nbsp;&nbsp;Labor</th><td>$<%= pm.laborRate %> / hour</td><td><%= pm.laborHours %> hours</td><td>$<%= pm.laborRate * pm.laborHours %></td></tr> <% labor += pm.laborRate * pm.laborHours %>
-	 <% pm.performed_maintenance_parts.each do |pmp| %>
-	    <tr><th>&nbsp;&nbsp;&nbsp;&nbsp;<%= pmp.part.description %></th><td>$<%= pmp.cost %></td><td><span class="label label-info">TODO</span></td><td>$<%= pmp.cost %></td></tr><% sales += pmp.cost %>
-	 <% end %>
-      <% end %>
-      <% if @service.tax %>
-	 <tr><th colspan=2>Tax</th><td><%= @service.tax %>%</td><td>$<%= @service.tax / 100 * sales %></td></tr><% tax = @service.tax / 100 * sales %>
-      <% end %>
-      <tr><th colspan=3>Total</th><td>$<%= labor + sales + tax %></td></tr>
-      </table>
-   </div>
-   <div class="panel-footer">
-      <%= link_to @service.vehicle, vehicle_path(@service.vehicle) %>
-      <span class="pull-right">Odometer: <%= @service.odometer %></span>
-   </div>
+  <div class="panel-heading">
+    <strong><%= @service.location %> <span class="pull-right"><%= @service.date %></span></strong>
+  </div>
+  <div class="panel-body">
+    <%= render partial: "table", locals: {service: @service} %>
+  </div>
+  <div class="panel-footer">
+    <%= link_to @service.vehicle, vehicle_path(@service.vehicle) %>
+    <span class="pull-right">Odometer: <%= @service.odometer %></span>
+  </div>
 </div>
 
 <%= link_to 'Edit', edit_service_path(@service) %> |
