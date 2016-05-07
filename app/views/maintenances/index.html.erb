@@ -12,6 +12,7 @@
       <th>InspectMonths</th>
       <th>ReplaceMiles</th>
       <th>ReplaceMonths</th>
+      <th>Schedule</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -26,6 +27,7 @@
         <td><%= maintenance.inspectMonths %></td>
         <td><%= maintenance.replaceMiles %></td>
         <td><%= maintenance.replaceMonths %></td>
+        <td><%= link_to maintenance.maintenance_schedule.id, maintenance_schedule_path(maintenance.maintenance_schedule) %></td>
         <td><%= link_to 'Show', maintenance %></td>
         <td><%= link_to 'Edit', edit_maintenance_path(maintenance) %></td>
         <td><%= link_to 'Destroy', maintenance, method: :delete, data: { confirm: 'Are you sure?' } %></td>

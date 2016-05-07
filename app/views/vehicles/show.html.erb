@@ -7,23 +7,38 @@
     <h3>Upcoming Service</h3>
     <% current_odometer = @vehicle.fillups.order(date: :desc).first.odometer %>
     <span class="label label-primaly"><%= current_odometer %></span>
-    <table class="table table-striped" style="display:block; overflow:auto; max-height: 20em">
-      <% @vehicle.maintenances.each do |maintenance| %>
-      <% most_recent = maintenance.performed_maintenances.joins(:service).where(services: {vehicle_id: @vehicle.id}).order("services.date DESC").first %>
-      <tr>
-        <td><%= maintenance.item %></td>
-        <td><% if most_recent %><%= most_recent.service.date %><% end %></td>
-        <td><% if most_recent %><%= most_recent.service.odometer %><% end %></td>
-        <td><% if most_recent %><%= current_odometer - most_recent.service.odometer %><% end %></td>
-        <td>
-          <% if most_recent %>
-          <%= maintenance.miles - (current_odometer - most_recent.service.odometer) %>
-          <% else %>
-          <span class="label label-danger">Never Checked</span>
-          <% end %>
-        </td>
-      </tr>
-      <% end %>
+    <table class="table table-striped" style="display:block; overflow:auto; max-height: 10em">
+      <tbody>
+        <% @vehicle.maintenances.sort { |a,b| a.miles_until_due(@vehicle) <=> b.miles_until_due(@vehicle) }.each do |maintenance| %>
+        <tr>
+          <td><%= maintenance.item %></td>
+          <td>
+            <% if maintenance.months_until_due(@vehicle) %>
+            <% if maintenance.months_until_due(@vehicle) <= 0 %>
+            <span class="label label-danger">
+              <%= -maintenance.months_until_due(@vehicle) %> months overdue
+            <% else %>
+            <span class="label label-success">
+              <%= maintenance.months_until_due(@vehicle) %> months remaining
+            <% end %>
+            <% else %>
+            <span class="label label-danger">Never Performed
+            <% end %>
+            </span>
+          </td>
+          <td>
+            <% if maintenance.miles_until_due(@vehicle) <= 0 %>
+            <span class="label label-danger">
+              <%= -maintenance.miles_until_due(@vehicle) %> miles overdue
+            <% else %>
+            <span class="label label-success">
+              <%= maintenance.miles_until_due(@vehicle) %> miles remaining
+            <% end %>
+            </span>
+          </td>
+        </tr>
+        <% end %>
+      </tbody>
     </table>
     <h3>Mileage History</h3>
     <table class="table table-striped" style="display:block; overflow:auto; max-height: 20em">
