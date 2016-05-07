@@ -10,6 +10,10 @@ class Vehicle < ActiveRecord::Base
      return self.canonical_vehicle.to_s
   end
 
+  def current_odometer
+    return self.fillups.order(date: :desc).first.odometer
+  end
+
   def image_file=(input_data)
      self.image = input_data.read
      self.content_type = input_data.content_type.chomp
