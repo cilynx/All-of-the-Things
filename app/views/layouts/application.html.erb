@@ -14,6 +14,7 @@
 	  <% if current_user %>
 	     <li class="<%= 'active' if params[:controller] == 'accounts' %>"><%= link_to(content_tag(:span, nil, :class => 'glyphicon glyphicon-usd') + " Accounts", { controller: "accounts", action: "index" }) %></li>
 	     <li class="<%= 'active' if params[:controller] == 'vehicles' %>"><%= link_to(content_tag(:span, nil, :class => 'glyphicon glyphicon-road') + " Vehicles", { controller: "vehicles", action: "index" }) %></li>
+	     <li class="<%= 'active' if params[:controller] == 'houses' %>"><%= link_to(content_tag(:span, nil, :class => 'glyphicon glyphicon-home') + " Houses", { controller: "houses", action: "index" }) %></li>
 	  <% end %>
 	</ul>
 	<ul class="nav navbar-nav navbar-right">

@@ -10,67 +10,67 @@
     <br>
     <table class="table table-striped">
       <thead>
-	<tr>
-	  <th>Date</th>
-	  <th>Action</th>
-	  <th>Payee</th>
-	  <th>Price</th>
-	  <% if @account.type == 'StockAccount' %>
-	    <th>Quantity</th>
-	    <th>Commission</th>
-	  <% end %>
-	  <th colspan=2>Memo</th>
-	</tr>
+        <tr>
+          <th>Date</th>
+          <th>Action</th>
+          <th>Payee</th>
+          <th>Price</th>
+          <% if @account.type == 'StockAccount' %>
+          <th>Quantity</th>
+          <th>Commission</th>
+          <% end %>
+          <th colspan=2>Memo</th>
+        </tr>
       </thead>
       <tbody>
-	<%= form_for :transaction, url: transactions_path, html: { class: 'form-inline' } do |f| %>
-	  <tr>
-	    <%= f.hidden_field(:account_id, value: @account.id) %>
-	    <td><%= f.date_select(:date, { class: 'form-control', placeholder: 'date' }) %></td>
-	    <td><%= f.text_field(:action, { class: 'form-control', placeholder: 'action' }) %></td>
-	    <td><%= f.select :vendor_id, options_for_select(Vendor.order(:name).map{|s|[s.name, s.id]}), {class: 'form-control', placeholder: 'date'} %></td>
-	    <td><%= f.number_field :price, step: '0.0001', class: 'form-control', placeholder: 'price' %></td>
-	    <% if @account.type == 'StockAccount' %>
-	      <td><%= f.number_field :quantity, step: '0.0001', class: 'form-control', placeholder: 'quantity' %></td>
-	      <td><%= f.number_field :commission, step: '0.01', class: 'form-control', placeholder: 'commission' %></td>
-	    <% end %>
-	    <td><%= f.submit('Add New', { class: 'btn btn-default' }) %>
-	</tr>
-      <% end %>
-      <% @account.transactions.sort { |a,b| a.date <=> b.date }.reverse.each do |transaction| %>
-	<tr id="<%= transaction.id %>">
-	  <td><%= transaction.date %></td>
-	  <td><%= transaction.action %></td>
-	  <td>
-	    <% if transaction.vendor %>
-	      <% if @account.type == 'StockAccount' %>
-		<%= link_to transaction.vendor.symbol, vendor_path(transaction.vendor) %>
-	      <% elsif @account.type == 'CheckingAccount' %>
-		<%= link_to transaction.vendor.name, vendor_path(transaction.vendor) %>
-	      <% else %>
-		<span class="label label-danger">Unknown account type</span>
-	      <% end %>
-	    <% else %>
-	      <% a = Alias.where(payee: transaction.payee, memo: transaction.memo).take %>
-	      <%= link_to '[Link memo to vendor or account]', edit_alias_path(a) %>
-	    <% end %>
-	  </td>
-	  <td><%= transaction.price %></td>
-	  <% if @account.type == 'StockAccount' %>
-	    <td><%= transaction.quantity %></td>
-	    <td><%= transaction.commission %></td>
-	  <% end %>
-	  <td><%= transaction.payee %></td>
-	  <td><%= transaction.memo %></td>
-	</tr>
-      <% end %>
+        <%= form_for :transaction, url: transactions_path, html: { class: 'form-inline' } do |f| %>
+        <tr>
+          <%= f.hidden_field(:account_id, value: @account.id) %>
+          <td><%= f.date_select(:date, { class: 'form-control', placeholder: 'date' }) %></td>
+          <td><%= f.text_field(:action, { class: 'form-control', placeholder: 'action' }) %></td>
+          <td><%= f.select :vendor_id, options_for_select(Vendor.order(:name).map{|s|[s.name, s.id]}), {class: 'form-control', placeholder: 'date'} %></td>
+          <td><%= f.number_field :price, step: '0.0001', class: 'form-control', placeholder: 'price' %></td>
+          <% if @account.type == 'StockAccount' %>
+          <td><%= f.number_field :quantity, step: '0.0001', class: 'form-control', placeholder: 'quantity' %></td>
+          <td><%= f.number_field :commission, step: '0.01', class: 'form-control', placeholder: 'commission' %></td>
+          <% end %>
+          <td><%= f.submit('Add New', { class: 'btn btn-default' }) %></td>
+        </tr>
+        <% end %>
+        <% @account.transactions.sort { |a,b| a.date <=> b.date }.reverse.each do |transaction| %>
+        <tr id="<%= transaction.id %>">
+          <td><%= transaction.date %></td>
+          <td><%= transaction.action %></td>
+          <td>
+            <% if transaction.vendor %>
+            <% if @account.type == 'StockAccount' %>
+            <%= link_to transaction.vendor.symbol, vendor_path(transaction.vendor) %>
+            <% elsif @account.type == 'CheckingAccount' %>
+            <%= link_to transaction.vendor.name, vendor_path(transaction.vendor) %>
+            <% else %>
+            <span class="label label-danger">Unknown account type</span>
+            <% end %>
+            <% else %>
+            <% a = Alias.where(payee: transaction.payee, memo: transaction.memo).take %>
+            <%= link_to '[Link memo to vendor or account]', edit_alias_path(a) %>
+            <% end %>
+          </td>
+          <td><%= transaction.price %></td>
+          <% if @account.type == 'StockAccount' %>
+          <td><%= transaction.quantity %></td>
+          <td><%= transaction.commission %></td>
+          <% end %>
+          <td><%= transaction.payee %></td>
+          <td><%= transaction.memo %></td>
+        </tr>
+        <% end %>
       </tbody>
     </table>
   </div>
   <div class="panel-footer">
     <%= form_tag import_account_transactions_path, multipart: true, class: 'form-inline' do %>
-      <%= file_field_tag :file, class: 'form-control' %>
-      <%= submit_tag "Import", class: 'btn btn-submit' %>
+    <%= file_field_tag :file, class: 'form-control' %>
+    <%= submit_tag "Import", class: 'btn btn-submit' %>
     <% end %>
   </div>
 </div>

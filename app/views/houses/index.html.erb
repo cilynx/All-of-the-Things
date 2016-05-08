@@ -1,0 +1,42 @@
+<h1>Listing Houses</h1>
+
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Address</th>
+      <th>City</th>
+      <th>State</th>
+      <th>Zip</th>
+      <th>ZPID</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <%= form_for :house, url: houses_path, html: { class: 'form-inline' } do |f| %>
+    <tr>
+      <td><%= f.text_field(:address, { class: 'form-control', placeholder: 'address' }) %></td>
+      <td><%= f.text_field(:city, { class: 'form-control', placeholder: 'city' }) %></td>
+      <td><%= f.text_field(:state, { class: 'form-control', placeholder: 'state' }) %></td>
+      <td><%= f.number_field :zip, step: '1', class: 'form-control', placeholder: 'zip' %></td>
+      <td colspan=4><%= f.submit('Add New', { class: 'btn btn-default' }) %></td>
+    </tr>
+    <% end %>
+    <% @houses.reverse.each do |house| %>
+    <tr>
+      <td><%= house.address %></td>
+      <td><%= house.city %></td>
+      <td><%= house.state %></td>
+      <td><%= house.zip %></td>
+      <td><%= house.zpid %></td>
+      <td><%= link_to 'Show', house %></td>
+      <td><%= link_to 'Edit', edit_house_path(house) %></td>
+      <td><%= link_to 'Destroy', house, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New House', new_house_path %>

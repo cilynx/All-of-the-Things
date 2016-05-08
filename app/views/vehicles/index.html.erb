@@ -12,7 +12,7 @@
    <% end %>
 </div>
 <%= form_for(:vehicle, url: vehicles_path, html: { :class => "form-inline" }) do |f| %>
-   <%= f.select :canonical_vehicle_id, options_for_select(CanonicalVehicle.order(:year, :make, :model)) %>
+   <%= f.select :canonical_vehicle_id, options_for_select(CanonicalVehicle.order(:year, :make, :model).map{|s|[s, s.id]}) %>
    <%= f.text_field(:vin, { :class => 'form-control', :placeholder => 'vin' }) %>
    <%= f.submit("Add New", { :class => 'btn btn-default' }) %>
    <%= f.file_field(:image_file, { :style => 'padding-top:1em' }) %>

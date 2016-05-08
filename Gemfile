@@ -43,6 +43,9 @@ gem 'ofx-parser'
 # Kaminari for pagination
 gem 'kaminari'
 
+# Rubillow for easy Zillow access
+gem 'rubillow'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 
