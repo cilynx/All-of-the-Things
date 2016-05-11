@@ -1,4 +1,34 @@
-<p id="notice"><%= notice %></p>
+<h1>Canonical Vehicles</h1>
+<ul>
+<% @maintenance_schedule.canonical_vehicles.each do |vehicle| %>
+<li><%= link_to vehicle, canonical_vehicle_path(vehicle) %></li>
+<% end %>
+</ul>
+<h1>Maintenance Procedures</h1>
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th colspan=2 style="text-align:center">Inspect</th>
+      <th colspan=2 style="text-align:center">Replace</th>
+      <th>Page</th>
+      <th>PDF</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @maintenance_schedule.maintenances.each do |maintenance| %>
+    <tr>
+      <td><%= link_to maintenance.item, maintenance_path(maintenance) %></td>
+      <td><% if maintenance.inspectMonths %><%= maintenance.inspectMonths %> months<% end %></td>
+      <td><% if maintenance.inspectMiles %><%= maintenance.inspectMiles %> miles<% end %></td>
+      <td><% if maintenance.replaceMonths %><%= maintenance.replaceMonths %> months<% end %></td>
+      <td><% if maintenance.replaceMiles%><%= maintenance.replaceMiles %> miles<% end %></td>
+      <td><%= maintenance.page %></td>
+      <td><%= maintenance.pdf %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
 
 <%= link_to 'Edit', edit_maintenance_schedule_path(@maintenance_schedule) %> |
 <%= link_to 'Back', maintenance_schedules_path %>
