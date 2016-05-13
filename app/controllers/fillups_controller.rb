@@ -1,10 +1,11 @@
 class FillupsController < ApplicationController
+  power :fillups
   before_action :set_fillup, only: [:show, :edit, :update, :destroy]
 
   # GET /fillups
   # GET /fillups.json
   def index
-    @fillups = Fillup.all
+    @fillups = current_power.fillups
   end
 
   # GET /fillups/1
@@ -64,7 +65,8 @@ class FillupsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_fillup
-      @fillup = Fillup.find(params[:id])
+      @fillup = current_power.fillups.find_by(:id => params[:id])
+      redirect_to fillups_url unless @fillup
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -1,10 +1,11 @@
 class StepsController < ApplicationController
+  power :crud => :steps
   before_action :set_step, only: [:show, :edit, :update, :destroy]
 
   # GET /steps
   # GET /steps.json
   def index
-    @steps = Step.all
+    @steps = current_power.steps
   end
 
   # GET /steps/1
@@ -64,7 +65,8 @@ class StepsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_step
-      @step = Step.find(params[:id])
+      @step = current_power.steps.find_by(:id => params[:id])
+      redirect_to steps_url unless @step
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

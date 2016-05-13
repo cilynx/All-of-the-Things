@@ -1,10 +1,11 @@
 class ServicesController < ApplicationController
+  power :services
   before_action :set_service, only: [:show, :edit, :update, :destroy]
 
   # GET /services
   # GET /services.json
   def index
-    @services = Service.all
+    @services = current_power.services
   end
 
   # GET /services/1
@@ -64,11 +65,12 @@ class ServicesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_service
-      @service = Service.find(params[:id])
+      @service = current_power.services.find_by(:id => params[:id])
+      redirect_to services_url unless @service
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def service_params
       params.require(:service).permit(:date, :odometer, :location, :tax, :vehicle_id)
     end
-end
+  end

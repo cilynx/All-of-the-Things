@@ -1,10 +1,12 @@
 class PartsController < ApplicationController
+  power :crud => :parts
+
   before_action :set_part, only: [:show, :edit, :update, :destroy]
 
   # GET /parts
   # GET /parts.json
   def index
-    @parts = Part.all
+    @parts = current_power.parts
   end
 
   # GET /parts/1
@@ -64,7 +66,8 @@ class PartsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_part
-      @part = Part.find(params[:id])
+      @part = current_power.parts.find_by(:id => params[:id])
+      redirect_to parts_url unless @part
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

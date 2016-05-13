@@ -30,5 +30,7 @@
   </tbody>
 </table>
 
+<% if current_power.updatable_maintenance_schedule?(@maintenance_schedule) %>
 <%= link_to 'Edit', edit_maintenance_schedule_path(@maintenance_schedule) %> |
+<% end %>
 <%= link_to 'Back', maintenance_schedules_path %>

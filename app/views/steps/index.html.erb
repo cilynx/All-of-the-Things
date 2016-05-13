@@ -1,8 +1,6 @@
-<p id="notice"><%= notice %></p>
-
 <h1>Listing Steps</h1>
 
-<table>
+<table class="table table-striped">
   <thead>
     <tr>
       <th>Text</th>
@@ -17,8 +15,12 @@
         <td><%= step.text %></td>
         <td><%= step.imageMD5 %></td>
         <td><%= link_to 'Show', step %></td>
+        <% if current_power.updatable_step?(step) %>
         <td><%= link_to 'Edit', edit_step_path(step) %></td>
+        <% end %>
+        <% if current_power.destroyable_step?(step) %>
         <td><%= link_to 'Destroy', step, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

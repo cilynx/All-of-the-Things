@@ -1,10 +1,11 @@
 class CanonicalVehiclesController < ApplicationController
+  power :crud => :canonical_vehicles
   before_action :set_canonical_vehicle, only: [:show, :edit, :update, :destroy]
 
   # GET /canonical_vehicles
   # GET /canonical_vehicles.json
   def index
-    @canonical_vehicles = CanonicalVehicle.all
+    @canonical_vehicles = current_power.canonical_vehicles
   end
 
   # GET /canonical_vehicles/1
@@ -64,7 +65,8 @@ class CanonicalVehiclesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_canonical_vehicle
-      @canonical_vehicle = CanonicalVehicle.find(params[:id])
+      @canonical_vehicle = current_power.canonical_vehicles.find_by(:id => params[:id])
+      redirect_to canonical_vehicles_url unless @canonical_vehicle
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

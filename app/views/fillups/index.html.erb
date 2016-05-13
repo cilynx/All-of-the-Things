@@ -1,5 +1,3 @@
-<p id="notice"><%= notice %></p>
-
 <h1>Listing Fillups</h1>
 
 <table class="table table-striped">
@@ -17,9 +15,9 @@
   </thead>
 
   <tbody>
-    <% @fillups.each do |fillup| %>
+    <% @fillups.order(odometer: :desc).each do |fillup| %>
       <tr>
-        <td><%= link_to fillup.vehicle.model, vehicle_path(fillup.vehicle) %></td>
+        <td><%= link_to fillup.vehicle, vehicle_path(fillup.vehicle) %></td>
         <td><%= fillup.date %></td>
         <td><%= fillup.odometer %></td>
         <td><%= fillup.gallons %></td>

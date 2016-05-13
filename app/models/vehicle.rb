@@ -1,10 +1,13 @@
 class Vehicle < ActiveRecord::Base
   belongs_to :user, inverse_of: :vehicles
+
   belongs_to :canonical_vehicle, inverse_of: :vehicles
   has_many :maintenances, through: :canonical_vehicle
 
   has_many :fillups
+
   has_many :services
+  has_many :performed_maintenances, through: :services
 
   def to_s
      return self.canonical_vehicle.to_s

@@ -1,5 +1,3 @@
-<p id="notice"><%= notice %></p>
-
 <h1>Listing Parts</h1>
 
 <table class="table table-striped">
@@ -19,8 +17,12 @@
         <td><%= part.description %></td>
         <td><%= part.url %></td>
         <td><%= link_to 'Show', part %></td>
+        <% if current_power.updatable_part?(part) %>
         <td><%= link_to 'Edit', edit_part_path(part) %></td>
+        <% end %>
+        <% if current_power.destroyable_part?(part) %>
         <td><%= link_to 'Destroy', part, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>
