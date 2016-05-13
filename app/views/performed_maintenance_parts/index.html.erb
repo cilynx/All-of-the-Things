@@ -1,22 +1,19 @@
-<p id="notice"><%= notice %></p>
-
 <h1>Listing Performed Maintenance Parts</h1>
 
-<table>
+<table class="table table-striped">
   <thead>
     <tr>
       <th>Performed maintenance</th>
       <th>Part</th>
       <th>Cost</th>
-      <th colspan="3"></th>
     </tr>
   </thead>
 
   <tbody>
     <% @performed_maintenance_parts.each do |performed_maintenance_part| %>
       <tr>
-        <td><%= performed_maintenance_part.performed_maintenance %></td>
-        <td><%= performed_maintenance_part.part %></td>
+        <td><%= link_to performed_maintenance_part.performed_maintenance, performed_maintenance_path(performed_maintenance_part.performed_maintenance) %></td>
+        <td><%= link_to performed_maintenance_part.part, part_path(performed_maintenance_part.part) %></td>
         <td><%= performed_maintenance_part.cost %></td>
         <td><%= link_to 'Show', performed_maintenance_part %></td>
         <td><%= link_to 'Edit', edit_performed_maintenance_part_path(performed_maintenance_part) %></td>

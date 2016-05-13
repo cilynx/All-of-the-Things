@@ -1,10 +1,11 @@
 class PerformedMaintenancePartsController < ApplicationController
+  power :performed_maintenance_parts
   before_action :set_performed_maintenance_part, only: [:show, :edit, :update, :destroy]
 
   # GET /performed_maintenance_parts
   # GET /performed_maintenance_parts.json
   def index
-    @performed_maintenance_parts = PerformedMaintenancePart.all
+    @performed_maintenance_parts = current_power.performed_maintenance_parts
   end
 
   # GET /performed_maintenance_parts/1
@@ -64,7 +65,8 @@ class PerformedMaintenancePartsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_performed_maintenance_part
-      @performed_maintenance_part = PerformedMaintenancePart.find(params[:id])
+      @performed_maintenance_part = current_power.performed_maintenance_parts.find_by(:id => params[:id])
+      redirect_to performed_maintenance_parts_url unless @performed_maintenance_part
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

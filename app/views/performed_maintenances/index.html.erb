@@ -14,6 +14,8 @@
       <tr>
         <td><%= performed_maintenance.maintenance %></td>
         <td><%= performed_maintenance.service %></td>
+        <td><%= link_to performed_maintenance.vehicle, vehicle_path(performed_maintenance.vehicle) %></td>
+        <td><%= link_to performed_maintenance.vehicle.user, user_path(performed_maintenance.vehicle.user) %></td>
         <td><%= link_to 'Show', performed_maintenance %></td>
         <td><%= link_to 'Edit', edit_performed_maintenance_path(performed_maintenance) %></td>
         <td><%= link_to 'Destroy', performed_maintenance, method: :delete, data: { confirm: 'Are you sure?' } %></td>

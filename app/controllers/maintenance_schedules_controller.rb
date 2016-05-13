@@ -1,10 +1,11 @@
 class MaintenanceSchedulesController < ApplicationController
+  power :crud => :maintenance_schedules
   before_action :set_maintenance_schedule, only: [:show, :edit, :update, :destroy]
 
   # GET /maintenance_schedules
   # GET /maintenance_schedules.json
   def index
-    @maintenance_schedules = MaintenanceSchedule.all
+    @maintenance_schedules = current_power.maintenance_schedules
   end
 
   # GET /maintenance_schedules/1
@@ -69,7 +70,8 @@ class MaintenanceSchedulesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_maintenance_schedule
-      @maintenance_schedule = MaintenanceSchedule.find(params[:id])
+      @maintenance_schedule = current_power.maintenance_schedules.find_by(:id => params[:id])
+      redirect_to maintenance_schedule_url unless @maintenance_schedule
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

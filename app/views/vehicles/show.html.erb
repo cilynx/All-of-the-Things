@@ -10,7 +10,7 @@
     <table class="table table-striped" style="display:block; overflow:auto; max-height: 10em">
       <tbody>
         <% @vehicle.maintenances.sort { |a,b| a.miles_until_due(@vehicle) <=> b.miles_until_due(@vehicle) }.each do |maintenance| %>
-        <tr>
+        <tr<% if maintenance.latest_performed_maintenance(@vehicle) %> data-toggle="modal" data-target="#service-<%= maintenance.latest_performed_maintenance(@vehicle).service.id %>"<% end %>>
           <td><%= maintenance.item %></td>
           <td>
             <% if maintenance.months_until_due(@vehicle) %>

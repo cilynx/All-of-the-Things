@@ -1,5 +1,3 @@
-<p id="notice"><%= notice %></p>
-
 <p>
   <strong>Text:</strong>
   <%= @step.text %>
@@ -10,5 +8,7 @@
   <%= @step.imageMD5 %>
 </p>
 
+<% if current_power.updatable_step?(@step) %>
 <%= link_to 'Edit', edit_step_path(@step) %> |
+<% end %>
 <%= link_to 'Back', steps_path %>

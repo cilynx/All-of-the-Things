@@ -27,8 +27,11 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
-# Use Devise for auth
+# Use Devise for authentication
 gem 'devise'
+
+# Use Consul for authorization
+gem 'consul'
 
 # Groups make more sense than roles
 gem 'groupify'
@@ -72,4 +75,3 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 end
-

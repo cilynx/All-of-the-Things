@@ -7,6 +7,15 @@ class User < ActiveRecord::Base
   groupify :named_group_member
 
   has_many :vehicles
+  has_many :services, through: :vehicles
+  has_many :fillups, through: :vehicles
+  has_many :performed_maintenances, through: :vehicles
+  has_many :performed_maintenance_parts, through: :performed_maintenances
+
   has_many :accounts
   has_many :transactions, through: :accounts
+
+  def to_s
+    return self.email
+  end
 end

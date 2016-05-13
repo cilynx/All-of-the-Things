@@ -1,10 +1,11 @@
 class MaintenancesController < ApplicationController
+  power :crud => :maintenances
   before_action :set_maintenance, only: [:show, :edit, :update, :destroy]
 
   # GET /maintenances
   # GET /maintenances.json
   def index
-    @maintenances = Maintenance.all
+    @maintenances = current_power.maintenances
   end
 
   # GET /maintenances/1
@@ -64,7 +65,8 @@ class MaintenancesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_maintenance
-      @maintenance = Maintenance.find(params[:id])
+      @maintenance = current_power.maintenances.find_by(:id => params[:id])
+      redirect_to maintenances_url unless @maintenance
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

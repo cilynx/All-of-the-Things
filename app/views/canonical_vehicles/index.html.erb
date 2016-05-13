@@ -1,5 +1,3 @@
-<p id="notice"><%= notice %></p>
-
 <h1>Listing Canonical Vehicles</h1>
 
 <table class="table table-striped">
@@ -8,20 +6,23 @@
       <th>Make</th>
       <th>Model</th>
       <th>Year</th>
-      <th colspan="3"></th>
     </tr>
   </thead>
 
   <tbody>
     <% @canonical_vehicles.each do |canonical_vehicle| %>
-      <tr>
-        <td><%= canonical_vehicle.make %></td>
-        <td><%= canonical_vehicle.model %></td>
-        <td><%= canonical_vehicle.year %></td>
-        <td><%= link_to 'Show', canonical_vehicle %></td>
-        <td><%= link_to 'Edit', edit_canonical_vehicle_path(canonical_vehicle) %></td>
-        <td><%= link_to 'Destroy', canonical_vehicle, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+    <tr>
+      <td><%= canonical_vehicle.make %></td>
+      <td><%= canonical_vehicle.model %></td>
+      <td><%= canonical_vehicle.year %></td>
+      <td><%= link_to 'Show', canonical_vehicle %></td>
+      <% if current_power.updatable_canonical_vehicle?(canonical_vehicle) %>
+      <td><%= link_to 'Edit', edit_canonical_vehicle_path(canonical_vehicle) %></td>
+      <% end %>
+      <% if current_power.destroyable_canonical_vehicle?(canonical_vehicle) %>
+      <td><%= link_to 'Destroy', canonical_vehicle, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <% end %>
+    </tr>
     <% end %>
   </tbody>
 </table>

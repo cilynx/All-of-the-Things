@@ -1,10 +1,11 @@
 class VehiclesController < ApplicationController
+  power :vehicles
   before_action :set_vehicle, only: [:show, :edit, :update, :destroy, :image, :fillup, :import]
 
   # GET /vehicles
   # GET /vehicles.json
   def index
-    @vehicles = current_user.vehicles
+    @vehicles = current_power.vehicles
   end
 
   # GET /vehicles/1
@@ -83,8 +84,8 @@ class VehiclesController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_vehicle
-    @vehicle = Vehicle.where("id = ? AND user_id = ?", params[:id], current_user.id).take
-    redirect_to vehicles_url unless @vehicle;
+    @vehicle = current_power.vehicles.find_by(:id => params[:id])
+    redirect_to vehicles_url unless @vehicle
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
