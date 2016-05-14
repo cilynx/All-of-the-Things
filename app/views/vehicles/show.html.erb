@@ -5,7 +5,7 @@
   </div>
   <div class="panel-body">
     <h3>Upcoming Service</h3>
-    <span class="label label-primaly"><%= current_odometer %></span>
+    <span class="label label-primaly"><%= @vehicle.current_odometer %></span>
     <table class="table table-striped" style="display:block; overflow:auto; max-height: 10em">
       <tbody>
         <% @vehicle.maintenances.sort { |a,b| a.miles_until_due(@vehicle) <=> b.miles_until_due(@vehicle) }.each do |maintenance| %>
