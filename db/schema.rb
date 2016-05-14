@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160512190219) do
+ActiveRecord::Schema.define(version: 20160514001213) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -170,6 +170,7 @@ ActiveRecord::Schema.define(version: 20160512190219) do
     t.datetime "updated_at",     null: false
     t.integer  "maintenance_id"
     t.string   "seeAlso",                     array: true
+    t.json     "data"
   end
 
   add_index "steps", ["maintenance_id"], name: "index_steps_on_maintenance_id", using: :btree
