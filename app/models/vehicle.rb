@@ -14,8 +14,10 @@ class Vehicle < ActiveRecord::Base
   end
 
   def current_odometer
-    if self.fillups
+    if self.fillups.first
       return self.fillups.order(date: :desc).first.odometer
+    else
+      return 0
     end
   end
 
