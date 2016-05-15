@@ -34,15 +34,16 @@ class Vehicle < ActiveRecord::Base
       json = JSON.parse(file.read)
       json["fillups_attributes"].each do |fillup_hash|
         fillup_hash["vehicle_id"] = vehicle_id
-        fillup = Fillup.where(
-        odometer: fillup_hash["odometer"],
-        vehicle_id: vehicle_id
-        ).take || Fillup.new(fillup_hash)
+        if fillup = Fillup.where(odometer: fillup_hash["odometer"], vehicle_id: vehicle_id).first
+          mcount += 1
+        else
+          fillup = Fillup.new(fillup_hash)
+        end
         fillup.save
         count += 1
       end
-      return "Imported " + count.to_s + " fillups from JSON"
-    elsif file.content_type == "text/css"
+      return "Imported " + (count - mcount).to_s + " new fillups from JSON and matched " + mcount.to_s + " existing fillups."
+    elsif file.content_type == "text/csv"
       require 'date'
       File.foreach(file.path).with_index do |line, index|
         if(line.match("Date,Mileage,Action,Location,Cost,Gallons,PPG"))
