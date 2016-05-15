@@ -17,6 +17,8 @@ class User < ActiveRecord::Base
 
   has_many :houses
 
+  has_many :tasks
+
   def to_s
     return self.email
   end
