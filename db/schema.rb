@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160515045911) do
+ActiveRecord::Schema.define(version: 20160515054133) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -178,6 +178,17 @@ ActiveRecord::Schema.define(version: 20160515045911) do
 
   add_index "steps", ["maintenance_id"], name: "index_steps_on_maintenance_id", using: :btree
 
+  create_table "tasks", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "name"
+    t.text     "note"
+    t.boolean  "complete"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "tasks", ["user_id"], name: "index_tasks_on_user_id", using: :btree
+
   create_table "transactions", force: :cascade do |t|
     t.date     "date"
     t.string   "action"
@@ -247,6 +258,7 @@ ActiveRecord::Schema.define(version: 20160515045911) do
   add_foreign_key "performed_maintenances", "services"
   add_foreign_key "services", "vehicles"
   add_foreign_key "steps", "maintenances"
+  add_foreign_key "tasks", "users"
   add_foreign_key "transactions", "accounts"
   add_foreign_key "transactions", "vendors"
   add_foreign_key "vehicles", "canonical_vehicles"

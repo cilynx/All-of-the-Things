@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :tasks
   resources :houses
   resources :performed_maintenances
   resources :performed_maintenance_parts

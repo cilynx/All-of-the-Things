@@ -81,6 +81,11 @@ class Power
     Step if @user.in_named_group?(:admin)
   end
 
+  # Users can only see their own Tasks
+  power :tasks do
+    @user.tasks
+  end
+
   # Users can only see their own Vehicles
   power :vehicles do
     @user.vehicles
