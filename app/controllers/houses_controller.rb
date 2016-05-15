@@ -1,10 +1,11 @@
 class HousesController < ApplicationController
+  power :houses
   before_action :set_house, only: [:show, :edit, :update, :destroy]
 
   # GET /houses
   # GET /houses.json
   def index
-    @houses = House.all
+    @houses = current_power.houses
   end
 
   # GET /houses/1
@@ -25,6 +26,7 @@ class HousesController < ApplicationController
   # POST /houses.json
   def create
     @house = House.new(house_params)
+    @house.user_id = current_user.id
     property = Rubillow::HomeValuation.search_results( { address: @house.address, citystatezip: @house.city + ' ' + @house.state } )
     if property.success?
       @house.zpid = property.zpid
@@ -70,7 +72,8 @@ class HousesController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_house
-    @house = House.find(params[:id])
+    @house = current_power.houses.find_by(:id => params[:id])
+    redirect_to houses_url unless @house
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

@@ -21,6 +21,11 @@ class Power
     @user.fillups
   end
 
+  # Users can only see their own Houses
+  power :houses do
+    @user.houses
+  end
+
   # Anyone can view Maintenances
   power :maintenances do
     Maintenance.all

@@ -15,6 +15,8 @@ class User < ActiveRecord::Base
   has_many :accounts
   has_many :transactions, through: :accounts
 
+  has_many :houses
+
   def to_s
     return self.email
   end

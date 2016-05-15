@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160514001213) do
+ActiveRecord::Schema.define(version: 20160515045911) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,9 +91,12 @@ ActiveRecord::Schema.define(version: 20160514001213) do
     t.integer  "zip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string   "url"
     t.integer  "zpid"
+    t.string   "url"
+    t.integer  "user_id"
   end
+
+  add_index "houses", ["user_id"], name: "index_houses_on_user_id", using: :btree
 
   create_table "maintenance_schedules", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -236,6 +239,7 @@ ActiveRecord::Schema.define(version: 20160514001213) do
   add_foreign_key "aliases", "vendors"
   add_foreign_key "canonical_vehicles", "maintenance_schedules"
   add_foreign_key "fillups", "vehicles"
+  add_foreign_key "houses", "users"
   add_foreign_key "maintenances", "maintenance_schedules"
   add_foreign_key "performed_maintenance_parts", "parts"
   add_foreign_key "performed_maintenance_parts", "performed_maintenances"
