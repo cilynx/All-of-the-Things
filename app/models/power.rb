@@ -6,6 +6,11 @@ class Power
     @user = user
   end
 
+  # Users can only see their own Accounts
+  power :accounts do
+    @user.accounts
+  end
+
   # Anyone can view CanonicalVehicles
   power :canonical_vehicles do
     CanonicalVehicle.all

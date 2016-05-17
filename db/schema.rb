@@ -91,8 +91,8 @@ ActiveRecord::Schema.define(version: 20160515054133) do
     t.integer  "zip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer  "zpid"
     t.string   "url"
+    t.integer  "zpid"
     t.integer  "user_id"
   end
 

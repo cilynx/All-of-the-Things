@@ -1,5 +1,5 @@
 class AccountsController < ApplicationController
-  before_action :authenticate_user!
+  power :accounts
   before_action :set_account, only: [:show, :edit, :update, :destroy, :import]
 
   # GET /accounts
@@ -71,7 +71,7 @@ class AccountsController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_account
-    @account = Account.where("id = ? AND user_id = ?", params[:id], current_user.id).take
+    @account = current_power.accounts.find_by(id: params[:id])
     redirect_to accounts_url unless @account;
   end
 
