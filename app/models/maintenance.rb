@@ -41,7 +41,8 @@ class Maintenance < ActiveRecord::Base
 
    def months_until_due(vehicle)
      if latest_date(vehicle)
-       return self.months - ((Date.today.year * 12 + Date.today.month) - (latest_date(vehicle).year * 12 + latest_date(vehicle).month))
+       return self.months - ((Date.today.year * 12 + Date.today.month) - (latest_date(vehicle).year * 12 + latest_date(vehicle).month)) if self.months
+       return "N/A"
      end
    end
 

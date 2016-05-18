@@ -12,7 +12,7 @@
         <tr>
           <td data-toggle="modal" data-target="#maintenance-<%= maintenance.id %>"><%= maintenance.item %></td>
           <td<% if maintenance.latest_performed_maintenance(@vehicle) %> data-toggle="modal" data-target="#service-<%= maintenance.latest_performed_maintenance(@vehicle).service.id %>"<% end %>>
-            <% if maintenance.months_until_due(@vehicle) %>
+            <% if maintenance.months_until_due(@vehicle).is_a? Integer %>
             <% if maintenance.months_until_due(@vehicle) <= 0 %>
             <span class="label label-danger">
               <%= -maintenance.months_until_due(@vehicle) %> months overdue
@@ -20,6 +20,8 @@
             <span class="label label-success">
               <%= maintenance.months_until_due(@vehicle) %> months remaining
             <% end %>
+            <% elsif maintenance.months_until_due(@vehicle).is_a? String %>
+            <span class="label label-success"><%= maintenance.months_until_due(@vehicle) %></span>
             <% else %>
             <span class="label label-danger">Never Performed
             <% end %>

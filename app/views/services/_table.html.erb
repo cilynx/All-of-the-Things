@@ -1,7 +1,10 @@
 <% labor = 0 %>
 <% sales = 0 %>
+<% service.tax ||= 0 %>
 <table class="table table-striped" style="display:block">
   <% service.performed_maintenances.each do |pm| %>
+  <% pm.laborRate ||= 0 %>
+  <% pm.laborHours ||= 0 %>
   <tr><th colspan=4><%= pm.maintenance.item %></th></tr>
   <tr><th>&nbsp;&nbsp;&nbsp;&nbsp;Labor</th><td>$<%= pm.laborRate %> / hour</td><td><%= pm.laborHours %> hours</td><td>$<%= pm.laborRate * pm.laborHours %></td></tr> <% labor += pm.laborRate * pm.laborHours %>
   <% pm.performed_maintenance_parts.each do |pmp| %>

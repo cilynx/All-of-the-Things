@@ -1,33 +1,32 @@
 <%= form_for(setup_performed_maintenance(@performed_maintenance)) do |f| %>
-  <% if @performed_maintenance.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@performed_maintenance.errors.count, "error") %> prohibited this performed_maintenance from being saved:</h2>
+<% if @performed_maintenance.errors.any? %>
+<div id="error_explanation">
+  <h2><%= pluralize(@performed_maintenance.errors.count, "error") %> prohibited this performed_maintenance from being saved:</h2>
+  <ul>
+    <% @performed_maintenance.errors.full_messages.each do |message| %>
+    <li><%= message %></li>
+    <% end %>
+  </ul>
+</div>
+<% end %>
 
-      <ul>
-	<% @performed_maintenance.errors.full_messages.each do |message| %>
-	  <li><%= message %></li>
-	<% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :service_id %><br>
-    <%= f.select :service_id, options_for_select(Service.order(:date).map{|s|[s, s.id]}) %>
-  </div>
-  <div class="field">
-    <%= f.label :maintenance_id %><br>
-    <%= f.select :maintenance_id, options_for_select(Maintenance.order(:item).map{|s|[s.item, s.id]}) %>
-  </div>
-  <div class="field">
-    <strong>Labor</strong><br>
-    <%= f.number_field :laborHours, step: '0.01'%> X $<%= f.number_field :laborRate, step: '0.01'%>
-  </div>
-  <%= f.fields_for :performed_maintenance_parts do |ff| %>
-    <div>
-      <%= ff.select :part_id, options_for_select(Part.order(:description).map{|s|[s.description, s.id]}), prompt: 'Add Parts' %>
-      $<%= ff.number_field :cost, step: '0.01' %>
-  </div>
+<div class="field">
+  <%= f.label :service_id %><br>
+  <%= f.select :service_id, options_for_select(Service.order(date: :desc).map{|s|[s, s.id]}) %>
+</div>
+<div class="field">
+  <%= f.label :maintenance_id %><br>
+  <%= f.select :maintenance_id, options_for_select(Maintenance.order(:item).map{|s|[s.item, s.id]}) %>
+</div>
+<div class="field">
+  <strong>Labor</strong><br>
+  <%= f.number_field :laborHours, step: '0.01'%> X $<%= f.number_field :laborRate, step: '0.01'%>
+</div>
+<%= f.fields_for :performed_maintenance_parts do |ff| %>
+<div>
+  <%= ff.select :part_id, options_for_select(Part.order(:description).map{|s|[s.description, s.id]}), prompt: 'Add Parts' %>
+  $<%= ff.number_field :cost, step: '0.01' %>
+</div>
 <% end %>
 <br>
 <div class="actions">
