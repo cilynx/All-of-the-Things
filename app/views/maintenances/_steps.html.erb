@@ -1,0 +1,16 @@
+<h2>Steps</h2>
+<table class="table table-striped">
+  <thead>
+  </thead>
+  <tbody>
+    <% maintenance.steps.each do |step| %>
+    <tr>
+      <td><%= step.imageMD5 %></td>
+      <td>
+        <%= step.seeAlso %>
+      </td>
+      <td><%= step.text %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

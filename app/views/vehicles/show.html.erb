@@ -9,9 +9,9 @@
     <table class="table table-striped" style="display:block; overflow:auto; max-height: 10em">
       <tbody>
         <% @vehicle.maintenances.sort { |a,b| a.miles_until_due(@vehicle) <=> b.miles_until_due(@vehicle) }.each do |maintenance| %>
-        <tr<% if maintenance.latest_performed_maintenance(@vehicle) %> data-toggle="modal" data-target="#service-<%= maintenance.latest_performed_maintenance(@vehicle).service.id %>"<% end %>>
-          <td><%= maintenance.item %></td>
-          <td>
+        <tr>
+          <td data-toggle="modal" data-target="#maintenance-<%= maintenance.id %>"><%= maintenance.item %></td>
+          <td<% if maintenance.latest_performed_maintenance(@vehicle) %> data-toggle="modal" data-target="#service-<%= maintenance.latest_performed_maintenance(@vehicle).service.id %>"<% end %>>
             <% if maintenance.months_until_due(@vehicle) %>
             <% if maintenance.months_until_due(@vehicle) <= 0 %>
             <span class="label label-danger">
@@ -25,7 +25,7 @@
             <% end %>
             </span>
           </td>
-          <td>
+          <td<% if maintenance.latest_performed_maintenance(@vehicle) %> data-toggle="modal" data-target="#service-<%= maintenance.latest_performed_maintenance(@vehicle).service.id %>"<% end %>>
             <% if maintenance.miles_until_due(@vehicle) <= 0 %>
             <span class="label label-danger">
               <%= -maintenance.miles_until_due(@vehicle) %> miles overdue
@@ -104,7 +104,26 @@
       </tbody>
     </table>
 
-    <% @vehicle.services.sort { |a,b| a.date <=> b.date }.reverse.each do |service| %>
+    <% @vehicle.maintenances.each do |maintenance| %>
+    <div class="modal fade" id="maintenance-<%= maintenance.id %>">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 class="modal-title"><%= maintenance.item %></h3>
+          </div>
+          <div class="modal-body">
+            <%= render partial: "maintenances/table", locals: {maintenance: maintenance} %>
+            <%= render partial: "maintenances/steps", locals: {maintenance: maintenance} %>
+          </div>
+          <div class="modal-footer">
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <% end %>
+
+    <% @vehicle.services.each do |service| %>
     <div class="modal fade" id="service-<%= service.id %>">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -119,11 +138,9 @@
             <span class="label label-primary"><%= service.odometer %></span></h3>
             <span class="label label-primary"><%= service.date %></span></h3>
           </div>
-
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-
     <% end %>
   </div>
 

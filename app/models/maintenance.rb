@@ -40,9 +40,8 @@ class Maintenance < ActiveRecord::Base
    end
 
    def months_until_due(vehicle)
-     if self.latest_performed_maintenance(vehicle)
-       lpm_date = self.latest_performed_maintenance(vehicle).service.date
-       return self.months - ((Date.today.year * 12 + Date.today.month) - (lpm_date.year * 12 + lpm_date.month))
+     if latest_date(vehicle)
+       return self.months - ((Date.today.year * 12 + Date.today.month) - (latest_date(vehicle).year * 12 + latest_date(vehicle).month))
      end
    end
 
